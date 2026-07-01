@@ -1,0 +1,15 @@
+Package: fgczquartotemplate
+Title: FGCZ Quarto Report Templates and Shared Styling
+Version: 0.0.0.9000
+Authors@R: 
+    person("Witold", "Wolski", , "witold@ethz.ch", role = c("aut", "cre"))
+Description: Shared Quarto report assets for FGCZ analysis packages
+    (ezRun, prolfqua): a common format YAML, SCSS theme, HTML header, and
+    starter report templates, plus helpers to stage them next to a .qmd
+    and render.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: 
+    quarto
