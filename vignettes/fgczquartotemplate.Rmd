@@ -1,0 +1,113 @@
+---
+title: "Using the FGCZ Quarto report templates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the FGCZ Quarto report templates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(fgczquartotemplate)
+```
+
+## What this package provides
+
+`fgczquartotemplate` ships one shared set of Quarto report assets so that FGCZ
+analysis packages (`ezRun`, `prolfqua`, ...) all produce reports with the same
+look and feel. A theme change becomes a single package bump instead of an edit
+in every downstream package.
+
+The assets live under `inst/quarto/`:
+
+```{r list-assets}
+list.files(fgcz_quarto_dir())
+```
+
+| File | Role |
+|------|------|
+| `_fgcz-report.yml` | Shared format defaults, pulled into a report via `metadata-files`. |
+| `fgcz.scss` | Theme overrides — tabset/card styling, figure rows. |
+| `fgcz_header_quarto.html` | FGCZ header, injected via `include-in-header`. |
+| `template.qmd` | Generic starter report demonstrating the layout patterns. |
+
+## Why the assets must sit next to the report
+
+The three styling files reference each other by **bare filename** — the format
+YAML names `fgcz.scss` and `fgcz_header_quarto.html`:
+
+```{r peek-yml}
+writeLines(head(readLines(fgcz_quarto_dir("_fgcz-report.yml")), 30))
+```
+
+Quarto resolves those names relative to the directory of the **input `.qmd`**,
+not relative to the YAML that mentions them. So all three files must physically
+sit next to the report at render time. That is exactly what
+`fgcz_copy_assets()` and `fgcz_render()` take care of.
+
+## The portable report header
+
+A report never hard-codes a path into the package. It keeps the same header it
+would have if the assets were local:
+
+````yaml
+---
+params:
+  reportTitle: "CountQC"
+title: "`r knitr::inline_expr("params$reportTitle")`"
+metadata-files: ["_fgcz-report.yml"]
+---
+````
+
+## Staging the assets
+
+`fgcz_copy_assets()` copies the three styling files into a directory. Here we
+stage them into a temporary directory and confirm they landed:
+
+```{r copy-assets}
+dir <- file.path(tempdir(), "demo-report")
+dir.create(dir, showWarnings = FALSE)
+
+staged <- fgcz_copy_assets(dir)
+basename(staged)
+file.exists(staged)
+```
+
+## Bootstrapping a new report
+
+`fgcz_use_template()` copies the starter `template.qmd` into a directory
+together with the styling assets it needs, so you have a runnable report in one
+call:
+
+```{r use-template}
+qmd <- fgcz_use_template(file.path(tempdir(), "new-report"),
+                         to = "my_report.qmd",
+                         overwrite = TRUE)
+list.files(dirname(qmd))
+```
+
+## Rendering
+
+`fgcz_render()` stages the assets and then calls `quarto::quarto_render()`. It
+needs the Quarto CLI, so the call below is shown but not run in this vignette:
+
+```{r render, eval = FALSE}
+fgcz_render(qmd, execute_params = list(reportTitle = "My analysis"))
+```
+
+That is the single call downstream packages use in place of a bare
+`quarto::quarto_render()`.
+
+## Using it from a downstream package
+
+1. Add `fgczquartotemplate` to `Imports` (and, since it is distributed on
+   GitHub, `Remotes: prolfqua/fgczquartotemplate`).
+2. Replace `quarto::quarto_render()` calls with
+   `fgczquartotemplate::fgcz_render()`.
+3. Keep report headers as `metadata-files: ["_fgcz-report.yml"]`.
+4. Git-ignore the staged copies in the render directory so the packaged assets
+   remain the single source of truth.
