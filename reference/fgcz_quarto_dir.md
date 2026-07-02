@@ -24,7 +24,7 @@ within it).
 
 ``` r
 fgcz_quarto_dir()
-#> [1] "/tmp/Rtmp8JzTzt/temp_libpath1a6d7ab08a61/fgczquartotemplate/quarto"
+#> [1] "/tmp/RtmpXvYvhQ/temp_libpath19de79de653b/fgczquartotemplate/quarto"
 fgcz_quarto_dir("template.qmd")
-#> [1] "/tmp/Rtmp8JzTzt/temp_libpath1a6d7ab08a61/fgczquartotemplate/quarto/template.qmd"
+#> [1] "/tmp/RtmpXvYvhQ/temp_libpath19de79de653b/fgczquartotemplate/quarto/template.qmd"
 ```

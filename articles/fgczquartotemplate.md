@@ -11,28 +11,32 @@ The assets live under `inst/quarto/`:
 
 ``` r
 list.files(fgcz_quarto_dir())
-#> [1] "_fgcz-report.yml"        "fgcz_header_quarto.html"
+#> [1] "_metadata.yml"           "fgcz_header_quarto.html"
 #> [3] "fgcz.scss"               "template.qmd"
 ```
 
-| File                      | Role                                                               |
-|---------------------------|--------------------------------------------------------------------|
-| `_fgcz-report.yml`        | Shared format defaults, pulled into a report via `metadata-files`. |
-| `fgcz.scss`               | Theme overrides — tabset/card styling, figure rows.                |
-| `fgcz_header_quarto.html` | FGCZ header, injected via `include-in-header`.                     |
-| `template.qmd`            | Generic starter report demonstrating the layout patterns.          |
+| File                      | Role                                                                            |
+|---------------------------|---------------------------------------------------------------------------------|
+| `_metadata.yml`           | Shared format defaults, applied automatically to every `.qmd` in the directory. |
+| `fgcz.scss`               | Theme overrides — tabset/card styling, figure rows.                             |
+| `fgcz_header_quarto.html` | FGCZ header, injected via `include-in-header`.                                  |
+| `template.qmd`            | Generic starter report demonstrating the layout patterns.                       |
 
 ## Why the assets must sit next to the report
 
-The three styling files reference each other by **bare filename** — the
-format YAML names `fgcz.scss` and `fgcz_header_quarto.html`:
+Quarto applies a file named `_metadata.yml` automatically to every
+`.qmd` in its directory (and subdirectories) — that is how the styling
+attaches without any front-matter reference. The file in turn names
+`fgcz.scss` and `fgcz_header_quarto.html` by **bare filename**:
 
 ``` r
-writeLines(head(readLines(fgcz_quarto_dir("_fgcz-report.yml")), 30))
+writeLines(head(readLines(fgcz_quarto_dir("_metadata.yml")), 30))
 #> ## ─────────────────────────────────────────────────────────────
 #> ## FGCZ Shared Report Defaults
-#> ## Include in individual .qmd files via:
-#> ##   metadata-files: ["_fgcz-report.yml"]
+#> ## Quarto applies this file automatically to every .qmd in this
+#> ## directory (and subdirectories) because it is named _metadata.yml.
+#> ## Individual reports need NO reference to it in their front matter.
+#> ## Keep fgcz.scss and fgcz_header_quarto.html next to it.
 #> ## ─────────────────────────────────────────────────────────────
 #> 
 #> format:
@@ -57,8 +61,6 @@ writeLines(head(readLines(fgcz_quarto_dir("_fgcz-report.yml")), 30))
 #> 
 #>     # FGCZ header
 #>     include-in-header: fgcz_header_quarto.html
-#> 
-#>     # Figure defaults
 ```
 
 Quarto resolves those names relative to the directory of the **input
@@ -72,17 +74,20 @@ take care of.
 
 ## The portable report header
 
-A report never hard-codes a path into the package. It keeps the same
-header it would have if the assets were local:
+Because `_metadata.yml` attaches by directory, a report carries **no**
+FGCZ-specific front matter at all — just its own params and title:
 
 ``` yaml
 ---
 params:
   reportTitle: "CountQC"
 title: "`r params$reportTitle`"
-metadata-files: ["_fgcz-report.yml"]
 ---
 ```
+
+Rendered with a bare `quarto render CountQC.qmd`, it still picks up the
+full styling — the package need not even be installed, as long as the
+three assets are in the directory.
 
 ## Staging the assets
 
@@ -96,7 +101,7 @@ dir.create(dir, showWarnings = FALSE)
 
 staged <- fgcz_copy_assets(dir)
 basename(staged)
-#> [1] "_fgcz-report.yml"        "fgcz.scss"              
+#> [1] "_metadata.yml"           "fgcz.scss"              
 #> [3] "fgcz_header_quarto.html"
 file.exists(staged)
 #> [1] TRUE TRUE TRUE
@@ -113,7 +118,7 @@ qmd <- fgcz_use_template(file.path(tempdir(), "new-report"),
                          to = "my_report.qmd",
                          overwrite = TRUE)
 list.files(dirname(qmd))
-#> [1] "_fgcz-report.yml"        "fgcz_header_quarto.html"
+#> [1] "_metadata.yml"           "fgcz_header_quarto.html"
 #> [3] "fgcz.scss"               "my_report.qmd"
 ```
 
@@ -140,6 +145,8 @@ That is the single call downstream packages use in place of a bare
     [`quarto::quarto_render()`](https://quarto-dev.github.io/quarto-r/reference/quarto_render.html)
     calls with
     [`fgczquartotemplate::fgcz_render()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.md).
-3.  Keep report headers as `metadata-files: ["_fgcz-report.yml"]`.
-4.  Git-ignore the staged copies in the render directory so the packaged
+3.  Leave report front matter free of any styling reference — the staged
+    `_metadata.yml` attaches automatically.
+4.  Git-ignore the staged copies (`_metadata.yml`, `fgcz.scss`,
+    `fgcz_header_quarto.html`) in the render directory so the packaged
     assets remain the single source of truth.

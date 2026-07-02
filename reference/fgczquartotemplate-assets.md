@@ -6,10 +6,11 @@ share one look and feel:
 
 ## Details
 
-- `_fgcz-report.yml`:
+- `_metadata.yml`:
 
-  Shared format defaults, included from a `.qmd` via
-  `metadata-files: ["_fgcz-report.yml"]`.
+  Shared format defaults. Quarto applies this file automatically to
+  every `.qmd` in its directory (and subdirectories) because of its
+  reserved name – reports need no reference to it.
 
 - `fgcz.scss`:
 
@@ -24,9 +25,12 @@ share one look and feel:
   A generic starter report demonstrating the tabset,
   figure-with-callout, and nesting patterns.
 
-These three styling files reference each other by **bare filename**, and
-Quarto resolves such paths relative to the directory of the input
-`.qmd`. They must therefore sit next to the `.qmd` at render time; see
+Because `_metadata.yml` is applied by directory, a `.qmd` rendered with
+a plain `quarto render` picks up the FGCZ styling with **no package
+involved and no front-matter reference** – as long as these three files
+sit in the same directory. The `_metadata.yml` references `fgcz.scss`
+and `fgcz_header_quarto.html` by bare filename, which Quarto resolves
+relative to the input `.qmd`, so all three must travel together; see
 [`fgcz_copy_assets()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_copy_assets.md)
 and
 [`fgcz_render()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.md).

@@ -47,9 +47,10 @@ one look and feel:</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<dl><dt><code>_fgcz-report.yml</code></dt>
-<dd><p>Shared format defaults, included from a <code>.qmd</code>
-via <code>metadata-files: ["_fgcz-report.yml"]</code>.</p></dd>
+<dl><dt><code>_metadata.yml</code></dt>
+<dd><p>Shared format defaults. Quarto applies this file
+automatically to every <code>.qmd</code> in its directory (and subdirectories)
+because of its reserved name – reports need no reference to it.</p></dd>
 
 <dt><code>fgcz.scss</code></dt>
 <dd><p>Theme overrides (tabset/card styling, figure rows).</p></dd>
@@ -63,10 +64,13 @@ via <code>metadata-files: ["_fgcz-report.yml"]</code>.</p></dd>
 figure-with-callout, and nesting patterns.</p></dd>
 
 
-</dl><p>These three styling files reference each other by <strong>bare filename</strong>, and
-Quarto resolves such paths relative to the directory of the input <code>.qmd</code>.
-They must therefore sit next to the <code>.qmd</code> at render time; see
-<code><a href="fgcz_copy_assets.html">fgcz_copy_assets()</a></code> and <code><a href="fgcz_render.html">fgcz_render()</a></code>.</p>
+</dl><p>Because <code>_metadata.yml</code> is applied by directory, a <code>.qmd</code> rendered with a
+plain <code>quarto render</code> picks up the FGCZ styling with <strong>no package involved
+and no front-matter reference</strong> – as long as these three files sit in the
+same directory. The <code>_metadata.yml</code> references <code>fgcz.scss</code> and
+<code>fgcz_header_quarto.html</code> by bare filename, which Quarto resolves relative to
+the input <code>.qmd</code>, so all three must travel together; see <code><a href="fgcz_copy_assets.html">fgcz_copy_assets()</a></code>
+and <code><a href="fgcz_render.html">fgcz_render()</a></code>.</p>
     </div>
 
   </main></div>

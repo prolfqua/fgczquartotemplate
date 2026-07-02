@@ -4,9 +4,9 @@ Stages the shared styling assets next to `input` (via
 [`fgcz_copy_assets()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_copy_assets.md))
 and then renders it with
 [`quarto::quarto_render()`](https://quarto-dev.github.io/quarto-r/reference/quarto_render.html).
-The `.qmd` keeps its portable header
-(`metadata-files: ["_fgcz-report.yml"]`) and does not need to know where
-the assets live.
+The `.qmd` needs no styling front matter at all: the staged
+`_metadata.yml` is picked up by Quarto automatically, so the report
+stays fully portable.
 
 ## Usage
 

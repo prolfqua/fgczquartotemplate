@@ -49,7 +49,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="fgczquartotemplate">fgczquartotemplate<a class="anchor" aria-label="anchor" href="#fgczquartotemplate"></a>
 </h1></div>
-<p>Shared <strong>Quarto report assets</strong> for FGCZ analysis packages (<code>ezRun</code>, <code>prolfqua</code>, …). It packages one common look-and-feel — a format YAML, an SCSS theme, and an HTML header — plus a starter report template and small helpers to stage those files next to a <code>.qmd</code> and render it.</p>
+<p>Shared <strong>Quarto report assets</strong> for FGCZ analysis packages (<code>ezRun</code>, <code>prolfqua</code>, …). It packages one common look-and-feel — a directory-level <code>_metadata.yml</code>, an SCSS theme, and an HTML header — plus a starter report template and small helpers to stage those files next to a <code>.qmd</code> and render it.</p>
 <p>The goal: keep the FGCZ report styling in <strong>one place</strong> so every package that produces Quarto reports shares it and a theme change is a single package bump.</p>
 <div class="section level2">
 <h2 id="whats-inside">What’s inside<a class="anchor" aria-label="anchor" href="#whats-inside"></a>
@@ -66,8 +66,8 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code>_fgcz-report.yml</code></td>
-<td>Shared format defaults, pulled into a report via <code>metadata-files: ["_fgcz-report.yml"]</code>.</td>
+<td><code>_metadata.yml</code></td>
+<td>Shared format defaults. Quarto applies it <strong>automatically</strong> to every <code>.qmd</code> in its directory — reports need no reference to it.</td>
 </tr>
 <tr class="even">
 <td><code>fgcz.scss</code></td>
@@ -85,34 +85,36 @@
 </table>
 </div>
 <div class="section level2">
-<h2 id="why-a-render-wrapper-and-not-just-an-absolute-path">Why a render wrapper (and not just an absolute path)<a class="anchor" aria-label="anchor" href="#why-a-render-wrapper-and-not-just-an-absolute-path"></a>
+<h2 id="how-the-styling-attaches-no-front-matter-coupling">How the styling attaches (no front-matter coupling)<a class="anchor" aria-label="anchor" href="#how-the-styling-attaches-no-front-matter-coupling"></a>
 </h2>
-<p>The three styling files reference each other by <strong>bare filename</strong> (<code>theme: [spacelab, fgcz.scss]</code>, <code>include-in-header: fgcz_header_quarto.html</code>), and Quarto resolves such paths relative to the <strong>input <code>.qmd</code>’s directory</strong> — not relative to the YAML that names them. So they must physically sit next to the <code>.qmd</code> at render time. <code><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets()</a></code> / <code><a href="reference/fgcz_render.html">fgcz_render()</a></code> put them there; the report’s header stays fully portable and never hard-codes a path.</p>
+<p>Quarto automatically merges a file named <code>_metadata.yml</code> into every <code>.qmd</code> in its directory and subdirectories. So a report carries <strong>no</strong> <code>metadata-files</code> line and no path to this package — it stays a plain <code>.qmd</code>. As long as the three files above sit in the same directory, a bare</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">quarto</span> render CountQC.qmd</span></code></pre></div>
+<p>renders with full FGCZ styling <strong>even if this package is not installed</strong>.</p>
+<p>The <code>_metadata.yml</code> references <code>fgcz.scss</code> and <code>fgcz_header_quarto.html</code> by bare filename, which Quarto resolves relative to the input <code>.qmd</code>, so all three must travel together. The package’s only job is to <em>stage</em> them next to a <code>.qmd</code> that lives elsewhere — that is what <code><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets()</a></code> / <code><a href="reference/fgcz_render.html">fgcz_render()</a></code> do.</p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Your report keeps exactly the header it has today:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="at">  </span><span class="fu">reportTitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"CountQC"</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"`r params$reportTitle`"</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">metadata-files</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"_fgcz-report.yml"</span><span class="kw">]</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
+<p>Your report’s front matter is just its own params/title — nothing FGCZ-specific:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="at">  </span><span class="fu">reportTitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"CountQC"</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"`r params$reportTitle`"</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
 <p>Render it through the wrapper — the shared assets are staged automatically:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span></span>
 <span>  <span class="st">"CountQC.qmd"</span>,</span>
 <span>  execute_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reportTitle <span class="op">=</span> <span class="st">"CountQC"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Bootstrap a brand-new report from the starter template:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_use_template.html">fgcz_use_template</a></span><span class="op">(</span><span class="st">"reports/my_analysis"</span>,</span>
 <span>                                      to <span class="op">=</span> <span class="st">"my_analysis.qmd"</span><span class="op">)</span></span>
 <span><span class="co"># edit reports/my_analysis/my_analysis.qmd, then:</span></span>
 <span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"reports/my_analysis/my_analysis.qmd"</span><span class="op">)</span></span></code></pre></div>
 <p>Just need the paths (e.g. to stage assets yourself)?</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_quarto_dir.html">fgcz_quarto_dir</a></span><span class="op">(</span><span class="op">)</span>             <span class="co"># the inst/quarto directory</span></span>
 <span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="st">"some/dir"</span><span class="op">)</span>  <span class="co"># stage the 3 styling files</span></span></code></pre></div>
 </div>
@@ -124,7 +126,7 @@
 <li><p>Replace ad-hoc <code>quarto_render()</code> calls with <code><a href="reference/fgcz_render.html">fgczquartotemplate::fgcz_render()</a></code>.</p></li>
 <li>
 <p>In the consumer, <strong>git-ignore the staged copies</strong> so the packaged assets remain the single source of truth — add to the render directory’s <code>.gitignore</code>:</p>
-<pre><code>_fgcz-report.yml
+<pre><code>_metadata.yml
 fgcz.scss
 fgcz_header_quarto.html</code></pre>
 </li>
@@ -134,7 +136,7 @@ fgcz_header_quarto.html</code></pre>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># from a local checkout</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"path/to/fgczquartotemplate"</span><span class="op">)</span></span></code></pre></div>
 </div>
