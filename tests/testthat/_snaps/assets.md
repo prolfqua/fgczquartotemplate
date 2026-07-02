@@ -4,5 +4,5 @@
       fgcz_copy_assets(txt)
     Condition
       Error:
-      ! `dir` must be a directory or .qmd file path.
+      ! `path` must be a single directory or a path to a .qmd file.
 

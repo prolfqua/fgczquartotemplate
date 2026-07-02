@@ -64,15 +64,15 @@ fgcz_quarto_dir <- function(...) {
 #'
 #' Copies the shared styling files (`_metadata.yml`, `fgcz.scss`,
 #' `fgcz_header_quarto.html`, `fgcz-plot-finder.html`) from the installed
-#' package into `dir`. `dir` may be either an existing directory, or an
+#' package next to a report. `path` may be either an existing directory, or an
 #' existing `.qmd` file whose containing directory should receive the assets.
 #' Because `_metadata.yml` is directory metadata, any `.qmd` in the target
 #' directory then renders with the FGCZ styling (and the search + download
 #' toolbar) automatically. Call this before rendering, or use [fgcz_render()],
 #' which calls it for you.
 #'
-#' @param dir Directory that contains (or will contain) the `.qmd` to render, or
-#'   a path to the `.qmd` itself.
+#' @param path An existing directory to stage the assets into, or a path to the
+#'   `.qmd` itself (assets go into its containing directory).
 #' @param overwrite Overwrite existing copies in the target directory. Defaults
 #'   to `TRUE` so the packaged assets stay the single source of truth.
 #'
@@ -84,36 +84,37 @@ fgcz_quarto_dir <- function(...) {
 #' fgcz_copy_assets("path/to/report/dir")
 #' fgcz_copy_assets("path/to/report.qmd")
 #' }
-fgcz_copy_assets <- function(dir, overwrite = TRUE) {
-  dir <- .fgcz_asset_target_dir(dir)
+fgcz_copy_assets <- function(path, overwrite = TRUE) {
+  target <- .fgcz_asset_target_dir(path)
   src <- fgcz_quarto_dir(.fgcz_style_assets)
-  ok <- file.copy(src, dir, overwrite = overwrite)
+  ok <- file.copy(src, target, overwrite = overwrite)
   if (!all(ok)) {
     stop(
       "Failed to copy assets: ",
       paste(.fgcz_style_assets[!ok], collapse = ", ")
     )
   }
-  invisible(file.path(dir, .fgcz_style_assets))
+  invisible(file.path(target, .fgcz_style_assets))
 }
 
-.fgcz_asset_target_dir <- function(dir) {
-  if (!is.character(dir) || length(dir) != 1 || is.na(dir)) {
-    stop("`dir` must be a single directory or .qmd file path.", call. = FALSE)
+# Resolve `path` (a directory, or a .qmd file) to the directory the assets
+# should be copied into. Same message for every "wrong kind of path" case so
+# the contract reads the same wherever it is hit.
+.fgcz_asset_target_dir <- function(path) {
+  bad <- "`path` must be a single directory or a path to a .qmd file."
+  if (!is.character(path) || length(path) != 1 || is.na(path)) {
+    stop(bad, call. = FALSE)
   }
-
-  if (dir.exists(dir)) {
-    return(normalizePath(dir, mustWork = TRUE))
+  if (dir.exists(path)) {
+    return(normalizePath(path, mustWork = TRUE))
   }
-
-  if (file.exists(dir)) {
-    if (!grepl("[.]qmd$", dir, ignore.case = TRUE)) {
-      stop("`dir` must be a directory or .qmd file path.", call. = FALSE)
+  if (file.exists(path)) {
+    if (!grepl("[.]qmd$", path, ignore.case = TRUE)) {
+      stop(bad, call. = FALSE)
     }
-    return(dirname(normalizePath(dir, mustWork = TRUE)))
+    return(dirname(normalizePath(path, mustWork = TRUE)))
   }
-
-  stop("`dir` does not exist: ", dir, call. = FALSE)
+  stop("`path` does not exist: ", path, call. = FALSE)
 }
 
 #' Copy the starter template into a directory

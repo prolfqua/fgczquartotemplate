@@ -88,7 +88,7 @@ deploy: install
 
 vignette:
 ifndef V
-	$(error Usage: make vignette V=<vignette_name>, e.g. make vignette V=Benchmark_prolfqua)
+	$(error Usage: make vignette V=<vignette_name>, e.g. make vignette V=fgczquartotemplate)
 endif
 	Rscript -e "rmarkdown::render('vignettes/$(V).Rmd')"
 

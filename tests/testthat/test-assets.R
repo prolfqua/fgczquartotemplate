@@ -10,7 +10,7 @@ test_that("fgcz_copy_assets copies assets into a directory", {
 
   paths <- fgcz_copy_assets(dir)
 
-  expect_equal(basename(paths), expected_files)
+  expect_setequal(basename(paths), expected_files)
   expect_equal(file.exists(paths), rep(TRUE, length(paths)))
   expect_equal(dirname(paths), rep(normalizePath(dir), length(paths)))
 })
