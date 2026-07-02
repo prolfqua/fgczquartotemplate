@@ -16,9 +16,10 @@ INSTALL_CMD = R CMD INSTALL $(TARBALL)
 LINT_CMD = Rscript -e "lintr::lint_package()"
 SITE_CMD = Rscript -e "pkgdown::build_site(install = FALSE)"
 DEPLOY_CMD = Rscript -e "pkgdown::deploy_to_branch()"
+RENDER_EXAMPLE_CMD = Rscript data-raw/render_example.R
 NEW_VERSION_CMD = Rscript -e "d <- read.dcf('DESCRIPTION'); old <- d[1, 'Version']; parts <- as.integer(strsplit(old, '.', fixed = TRUE)[[1]]); if (length(parts) < 3) parts <- c(parts, rep(0L, 3L - length(parts))); parts[3] <- parts[3] + 1L; new <- paste(parts, collapse = '.'); x <- readLines('DESCRIPTION'); x <- sub('^Version: .*', paste0('Version: ', new), x); writeLines(x, 'DESCRIPTION'); cat(new)"
 
-.PHONY: all help document build build-vignettes vignettes install test check-fast check-bioc check coverage lint format site deploy clean new-version new_version vignette
+.PHONY: all help document build build-vignettes vignettes install test check-fast check-bioc check coverage lint format example site deploy clean new-version new_version vignette
 
 all: check
 
@@ -36,7 +37,8 @@ help:
 	@echo "  make coverage        - code coverage report"
 	@echo "  make lint            - run lintr"
 	@echo "  make format          - format with air"
-	@echo "  make site            - build pkgdown site locally"
+	@echo "  make example         - render the live example report into pkgdown/assets"
+	@echo "  make site            - render example, then build pkgdown site locally"
 	@echo "  make deploy          - build and deploy pkgdown site"
 	@echo "  make vignette V=Name - render a single vignette"
 	@echo "  make new-version     - bump patch version, commit, tag, and push"
@@ -80,10 +82,13 @@ lint:
 format:
 	air format .
 
-site: install
+example:
+	$(RENDER_EXAMPLE_CMD)
+
+site: install example
 	$(SITE_CMD)
 
-deploy: install
+deploy: install example
 	$(DEPLOY_CMD)
 
 vignette:
