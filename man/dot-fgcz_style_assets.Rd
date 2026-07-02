@@ -5,15 +5,16 @@
 \alias{.fgcz_style_assets}
 \title{The names of the shared styling assets}
 \format{
-An object of class \code{character} of length 3.
+An object of class \code{character} of length 4.
 }
 \usage{
 .fgcz_style_assets
 }
 \description{
-The three files that every FGCZ report needs alongside it: the directory
-metadata (\verb{_metadata.yml}), the SCSS theme, and the HTML header.
-\code{template.qmd} is deliberately excluded -- it is a starter you copy once, not
-an asset staged on every render.
+The files that every FGCZ report needs alongside it: the directory metadata
+(\verb{_metadata.yml}), the SCSS theme, the HTML header, and the search + download
+toolbar (referenced from \verb{_metadata.yml} by bare filename). \code{template.qmd} is
+deliberately excluded -- it is a starter you copy once, not an asset staged
+on every render.
 }
 \keyword{internal}

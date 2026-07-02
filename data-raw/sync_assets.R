@@ -17,7 +17,7 @@ dest_dir <- file.path("_extensions", "fgczquartotemplate")
 stopifnot(dir.exists(dest_dir), dir.exists(file.path("inst", "quarto")))
 
 ## (1) Sync the byte-identical shared files ----------------------------------
-shared <- c("fgcz.scss", "fgcz_header_quarto.html")
+shared <- c("fgcz.scss", "fgcz_header_quarto.html", "fgcz-plot-finder.html")
 src <- file.path("inst", "quarto", shared)
 stopifnot(all(file.exists(src)))
 ok <- file.copy(src, dest_dir, overwrite = TRUE)

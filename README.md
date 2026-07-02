@@ -1,9 +1,11 @@
 # fgczquartotemplate
 
 One shared **FGCZ look-and-feel** for Quarto reports (theme + header + defaults),
-reusable across `ezRun`, `prolfqua`, `prolfquapp`, …
+reusable across `ezRun`, `prolfqua`, `prolfquapp`, …. Every report also gets a
+right-edge **🔍 Find / 📥 Save toolbar** — search any figure or table, or bundle
+the plots into a ZIP.
 
-**👉 [See a live example report](https://prolfqua.github.io/fgczquartotemplate/example-report.html)** — the real layout, tabsets, and figures.
+**👉 [See a live example report](https://prolfqua.github.io/fgczquartotemplate/example-report.html)** — the real layout, tabsets, figures, and the Find/Save toolbar.
 
 There are **two ways** to use it. Pick one.
 

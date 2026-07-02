@@ -11,33 +11,37 @@
 #'   \item{`fgcz.scss`}{Theme overrides (tabset/card styling, figure rows).}
 #'   \item{`fgcz_header_quarto.html`}{FGCZ header injected via
 #'     `include-in-header`.}
+#'   \item{`fgcz-plot-finder.html`}{Right-edge search + download toolbar,
+#'     injected via `include-after-body`.}
 #'   \item{`template.qmd`}{A generic starter report demonstrating the tabset,
 #'     figure-with-callout, and nesting patterns.}
 #' }
 #'
 #' Because `_metadata.yml` is applied by directory, a `.qmd` rendered with a
 #' plain `quarto render` picks up the FGCZ styling with **no package involved
-#' and no front-matter reference** -- as long as these three files sit in the
-#' same directory. The `_metadata.yml` references `fgcz.scss` and
-#' `fgcz_header_quarto.html` by bare filename, which Quarto resolves relative to
-#' the input `.qmd`, so all three must travel together; see [fgcz_copy_assets()]
-#' and [fgcz_render()].
+#' and no front-matter reference** -- as long as the styling files sit in the
+#' same directory. The `_metadata.yml` references `fgcz.scss`,
+#' `fgcz_header_quarto.html` and `fgcz-plot-finder.html` by bare filename, which
+#' Quarto resolves relative to the input `.qmd`, so they must travel together;
+#' see [fgcz_copy_assets()] and [fgcz_render()].
 #'
 #' @name fgczquartotemplate-assets
 NULL
 
 #' The names of the shared styling assets
 #'
-#' The three files that every FGCZ report needs alongside it: the directory
-#' metadata (`_metadata.yml`), the SCSS theme, and the HTML header.
-#' `template.qmd` is deliberately excluded -- it is a starter you copy once, not
-#' an asset staged on every render.
+#' The files that every FGCZ report needs alongside it: the directory metadata
+#' (`_metadata.yml`), the SCSS theme, the HTML header, and the search + download
+#' toolbar (referenced from `_metadata.yml` by bare filename). `template.qmd` is
+#' deliberately excluded -- it is a starter you copy once, not an asset staged
+#' on every render.
 #'
 #' @keywords internal
 .fgcz_style_assets <- c(
   "_metadata.yml",
   "fgcz.scss",
-  "fgcz_header_quarto.html"
+  "fgcz_header_quarto.html",
+  "fgcz-plot-finder.html"
 )
 
 #' Path to the installed Quarto assets
@@ -58,10 +62,12 @@ fgcz_quarto_dir <- function(...) {
 
 #' Copy the shared report assets next to a `.qmd`
 #'
-#' Copies `_metadata.yml`, `fgcz.scss` and `fgcz_header_quarto.html` from the
-#' installed package into `dir`. Because `_metadata.yml` is directory metadata,
-#' any `.qmd` in `dir` then renders with the FGCZ styling automatically. Call
-#' this before rendering, or use [fgcz_render()], which calls it for you.
+#' Copies the shared styling files (`_metadata.yml`, `fgcz.scss`,
+#' `fgcz_header_quarto.html`, `fgcz-plot-finder.html`) from the installed
+#' package into `dir`. Because `_metadata.yml` is directory metadata, any `.qmd`
+#' in `dir` then renders with the FGCZ styling (and the search + download
+#' toolbar) automatically. Call this before rendering, or use [fgcz_render()],
+#' which calls it for you.
 #'
 #' @param dir Directory that contains (or will contain) the `.qmd` to render.
 #' @param overwrite Overwrite existing copies in `dir`. Defaults to `TRUE` so

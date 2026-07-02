@@ -9,6 +9,7 @@
 format:
   html:
     embed-resources: true
+    self-contained: true
     smooth-scroll: true
     page-layout: full
 
@@ -27,6 +28,9 @@ format:
 
     # FGCZ header
     include-in-header: fgcz_header_quarto.html
+
+    # FGCZ search + download toolbar (right-edge buttons)
+    include-after-body: fgcz-plot-finder.html
 
     # Figure defaults
     fig-dpi: 300
