@@ -12,11 +12,23 @@
 
 stopifnot(nzchar(Sys.which("quarto")))
 
-ext <- normalizePath(file.path("_extensions", "fgczquartotemplate"), mustWork = TRUE)
-qmd <- normalizePath(file.path("inst", "quarto", "template.qmd"), mustWork = TRUE)
-dir.create(file.path("pkgdown", "assets"), recursive = TRUE, showWarnings = FALSE)
-outfile <- normalizePath(file.path("pkgdown", "assets", "example-report.html"),
-                         mustWork = FALSE)
+ext <- normalizePath(
+  file.path("_extensions", "fgczquartotemplate"),
+  mustWork = TRUE
+)
+qmd <- normalizePath(
+  file.path("inst", "quarto", "template.qmd"),
+  mustWork = TRUE
+)
+dir.create(
+  file.path("pkgdown", "assets"),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+outfile <- normalizePath(
+  file.path("pkgdown", "assets", "example-report.html"),
+  mustWork = FALSE
+)
 
 # Single-file renders resolve _extensions in the input file's OWN directory and
 # assemble self-contained output relative to the working directory, so render
@@ -35,15 +47,25 @@ on.exit(setwd(oldwd), add = TRUE)
 #
 # shQuote every arg: system2 passes them through a shell, so the space in the
 # param value would otherwise be word-split.
-status <- system2("quarto", shQuote(c(
-  "render", "example.qmd",
-  "--to", "fgczquartotemplate-html",
-  "--output", "example-report.html",
-  "-M", "lightbox:false",
-  "-P", "reportTitle:FGCZ live layout example"
-)))
+status <- system2(
+  "quarto",
+  shQuote(c(
+    "render",
+    "example.qmd",
+    "--to",
+    "fgczquartotemplate-html",
+    "--output",
+    "example-report.html",
+    "-M",
+    "lightbox:false",
+    "-P",
+    "reportTitle:FGCZ live layout example"
+  ))
+)
 setwd(oldwd)
-if (status != 0L) stop("quarto render failed (status ", status, ")")
+if (status != 0L) {
+  stop("quarto render failed (status ", status, ")")
+}
 
 file.copy(file.path(tmp, "example-report.html"), outfile, overwrite = TRUE)
 message("Wrote ", outfile)

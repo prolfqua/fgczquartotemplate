@@ -1,113 +1,46 @@
 .DEFAULT_GOAL := check
 
 PKG_NAME := $(shell awk '/^Package:/ {print $$2; exit}' DESCRIPTION)
-PKG_VERSION := $(shell awk '/^Version:/ {print $$2; exit}' DESCRIPTION)
-TARBALL := ../$(PKG_NAME)_$(PKG_VERSION).tar.gz
 
-DOCUMENT_CMD = Rscript -e "devtools::document()"
-BUILD_CMD = Rscript -e "devtools::build(vignettes = TRUE)"
-CHECK_CMD = Rscript -e "devtools::check()"
-CHECK_FAST_CMD = Rscript -e "devtools::check(build_args = '--no-build-vignettes', args = '--no-vignettes', vignettes = FALSE)"
-CHECK_BIOC_CMD = Rscript -e "BiocCheck::BiocCheck()"
-BUILD_VIGNETTES_CMD = Rscript -e "devtools::build_vignettes()"
-TEST_CMD = Rscript -e "devtools::test()"
-COVERAGE_CMD = Rscript -e "covr::package_coverage() |> print()"
-INSTALL_CMD = R CMD INSTALL $(TARBALL)
-LINT_CMD = Rscript -e "lintr::lint_package()"
-SITE_CMD = Rscript -e "pkgdown::build_site(install = FALSE)"
-DEPLOY_CMD = Rscript -e "pkgdown::deploy_to_branch()"
-RENDER_EXAMPLE_CMD = Rscript data-raw/render_example.R
-NEW_VERSION_CMD = Rscript -e "d <- read.dcf('DESCRIPTION'); old <- d[1, 'Version']; parts <- as.integer(strsplit(old, '.', fixed = TRUE)[[1]]); if (length(parts) < 3) parts <- c(parts, rep(0L, 3L - length(parts))); parts[3] <- parts[3] + 1L; new <- paste(parts, collapse = '.'); x <- readLines('DESCRIPTION'); x <- sub('^Version: .*', paste0('Version: ', new), x); writeLines(x, 'DESCRIPTION'); cat(new)"
-
-.PHONY: all help document build build-vignettes vignettes install test check-fast check-bioc check coverage lint format example site deploy clean new-version new_version vignette
-
-all: check
+.PHONY: help document sync example test check site format clean
 
 help:
-	@echo "$(PKG_NAME) development targets:"
-	@echo "  make document        - generate roxygen2 docs"
-	@echo "  make build           - build source tarball with vignettes"
-	@echo "  make build-vignettes - build vignettes into inst/doc"
-	@echo "  make vignettes       - alias for build-vignettes"
-	@echo "  make install         - build source tarball with vignettes and install it"
-	@echo "  make test            - run testthat tests"
-	@echo "  make check-fast      - R CMD check without vignettes"
-	@echo "  make check-bioc      - run BiocCheck"
-	@echo "  make check           - full R CMD check"
-	@echo "  make coverage        - code coverage report"
-	@echo "  make lint            - run lintr"
-	@echo "  make format          - format with air"
-	@echo "  make example         - render the live example report into pkgdown/assets"
-	@echo "  make site            - render example, then build pkgdown site locally"
-	@echo "  make deploy          - build and deploy pkgdown site"
-	@echo "  make vignette V=Name - render a single vignette"
-	@echo "  make new-version     - bump patch version, commit, tag, and push"
-	@echo "  make clean           - remove build artifacts"
+	@echo "$(PKG_NAME) targets:"
+	@echo "  make document  - regenerate roxygen2 docs (man/, NAMESPACE)"
+	@echo "  make sync      - mirror inst/quarto assets into _extensions/ and verify _metadata.yml <-> _extension.yml agree"
+	@echo "  make example   - sync, then render the live example report into pkgdown/assets/"
+	@echo "  make test      - run testthat tests"
+	@echo "  make check     - document + sync, then full R CMD check"
+	@echo "  make site      - sync + render example, then build the pkgdown site locally"
+	@echo "  make format    - format R sources with air"
+	@echo "  make clean     - remove build artifacts"
 
 document:
-	$(DOCUMENT_CMD)
+	Rscript -e "devtools::document()"
 
-build: document
-	$(BUILD_CMD)
+# The single source of truth is inst/quarto/. sync mirrors the shared assets into
+# the Quarto extension and fails on any drift between the two channels' YAML, so
+# everything that ships or renders the extension depends on it.
+sync:
+	Rscript data-raw/sync_assets.R
 
-build-vignettes: document
-	rm -rf doc inst/doc
-	$(BUILD_VIGNETTES_CMD)
-	mkdir -p inst/doc
-	cp doc/*.html doc/*.Rmd doc/*.R inst/doc/ 2>/dev/null || true
-
-vignettes: build-vignettes
-
-install: build
-	$(INSTALL_CMD)
+# render_example.R renders from _extensions/, so the extension must be synced first.
+example: sync
+	Rscript data-raw/render_example.R
 
 test: document
-	$(TEST_CMD)
+	Rscript -e "devtools::test()"
 
-check-fast: document
-	$(CHECK_FAST_CMD)
+check: document sync
+	Rscript -e "devtools::check()"
 
-check-bioc:
-	$(CHECK_BIOC_CMD)
-
-check: build
-	$(CHECK_CMD)
-
-coverage: document
-	$(COVERAGE_CMD)
-
-lint:
-	$(LINT_CMD)
+site: example
+	Rscript -e "pkgdown::build_site(install = TRUE)"
 
 format:
 	air format .
 
-example:
-	$(RENDER_EXAMPLE_CMD)
-
-site: install example
-	$(SITE_CMD)
-
-deploy: install example
-	$(DEPLOY_CMD)
-
-vignette:
-ifndef V
-	$(error Usage: make vignette V=<vignette_name>, e.g. make vignette V=fgczquartotemplate)
-endif
-	Rscript -e "rmarkdown::render('vignettes/$(V).Rmd')"
-
-new-version new_version:
-	@NEW_VERSION="$$( $(NEW_VERSION_CMD) )"; \
-	echo "Bumped version to $$NEW_VERSION"; \
-	git add DESCRIPTION; \
-	git commit -m "new version $$NEW_VERSION"; \
-	git tag "$$NEW_VERSION"; \
-	git push && git push --tags; \
-	echo "Released $$NEW_VERSION"
-
 clean:
-	rm -rf *.Rcheck
-	rm -f Rplots.pdf
-	rm -rf inst/doc doc Meta
-	rm -f vignettes/*.html vignettes/*.R
+	rm -rf *.Rcheck docs
+	rm -f Rplots.pdf pkgdown/assets/example-report.html
+	rm -f ../$(PKG_NAME)_*.tar.gz
