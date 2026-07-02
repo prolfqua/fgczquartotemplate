@@ -24,6 +24,8 @@ Suggests:
     ggplot2,
     knitr,
     rmarkdown,
+    testthat (>= 3.0.0),
     yaml
 VignetteBuilder: knitr
+Config/testthat/edition: 3
 Config/Needs/website: DT, ggplot2

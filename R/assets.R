@@ -64,14 +64,17 @@ fgcz_quarto_dir <- function(...) {
 #'
 #' Copies the shared styling files (`_metadata.yml`, `fgcz.scss`,
 #' `fgcz_header_quarto.html`, `fgcz-plot-finder.html`) from the installed
-#' package into `dir`. Because `_metadata.yml` is directory metadata, any `.qmd`
-#' in `dir` then renders with the FGCZ styling (and the search + download
+#' package into `dir`. `dir` may be either an existing directory, or an
+#' existing `.qmd` file whose containing directory should receive the assets.
+#' Because `_metadata.yml` is directory metadata, any `.qmd` in the target
+#' directory then renders with the FGCZ styling (and the search + download
 #' toolbar) automatically. Call this before rendering, or use [fgcz_render()],
 #' which calls it for you.
 #'
-#' @param dir Directory that contains (or will contain) the `.qmd` to render.
-#' @param overwrite Overwrite existing copies in `dir`. Defaults to `TRUE` so
-#'   the packaged assets stay the single source of truth.
+#' @param dir Directory that contains (or will contain) the `.qmd` to render, or
+#'   a path to the `.qmd` itself.
+#' @param overwrite Overwrite existing copies in the target directory. Defaults
+#'   to `TRUE` so the packaged assets stay the single source of truth.
 #'
 #' @return Character vector of the copied file paths, invisibly.
 #' @export
@@ -79,16 +82,38 @@ fgcz_quarto_dir <- function(...) {
 #' @examples
 #' \dontrun{
 #' fgcz_copy_assets("path/to/report/dir")
+#' fgcz_copy_assets("path/to/report.qmd")
 #' }
 fgcz_copy_assets <- function(dir, overwrite = TRUE) {
-  stopifnot(dir.exists(dir))
+  dir <- .fgcz_asset_target_dir(dir)
   src <- fgcz_quarto_dir(.fgcz_style_assets)
   ok <- file.copy(src, dir, overwrite = overwrite)
   if (!all(ok)) {
-    stop("Failed to copy assets: ",
-         paste(.fgcz_style_assets[!ok], collapse = ", "))
+    stop(
+      "Failed to copy assets: ",
+      paste(.fgcz_style_assets[!ok], collapse = ", ")
+    )
   }
   invisible(file.path(dir, .fgcz_style_assets))
+}
+
+.fgcz_asset_target_dir <- function(dir) {
+  if (!is.character(dir) || length(dir) != 1 || is.na(dir)) {
+    stop("`dir` must be a single directory or .qmd file path.", call. = FALSE)
+  }
+
+  if (dir.exists(dir)) {
+    return(normalizePath(dir, mustWork = TRUE))
+  }
+
+  if (file.exists(dir)) {
+    if (!grepl("[.]qmd$", dir, ignore.case = TRUE)) {
+      stop("`dir` must be a directory or .qmd file path.", call. = FALSE)
+    }
+    return(dirname(normalizePath(dir, mustWork = TRUE)))
+  }
+
+  stop("`dir` does not exist: ", dir, call. = FALSE)
 }
 
 #' Copy the starter template into a directory
@@ -115,7 +140,9 @@ fgcz_use_template <- function(dir, to = "template.qmd", overwrite = FALSE) {
   if (file.exists(dest) && !overwrite) {
     stop("'", dest, "' already exists; pass overwrite = TRUE to replace it.")
   }
-  if (!file.copy(fgcz_quarto_dir("template.qmd"), dest, overwrite = overwrite)) {
+  if (
+    !file.copy(fgcz_quarto_dir("template.qmd"), dest, overwrite = overwrite)
+  ) {
     stop("Failed to copy template to '", dest, "'.")
   }
   fgcz_copy_assets(dir)
@@ -145,6 +172,6 @@ fgcz_render <- function(input, ...) {
     stop("Package 'quarto' is required to render reports.")
   }
   stopifnot(file.exists(input))
-  fgcz_copy_assets(dirname(normalizePath(input)))
+  fgcz_copy_assets(input)
   invisible(quarto::quarto_render(input = input, ...))
 }

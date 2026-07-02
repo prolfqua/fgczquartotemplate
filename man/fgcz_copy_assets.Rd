@@ -7,10 +7,11 @@
 fgcz_copy_assets(dir, overwrite = TRUE)
 }
 \arguments{
-\item{dir}{Directory that contains (or will contain) the \code{.qmd} to render.}
+\item{dir}{Directory that contains (or will contain) the \code{.qmd} to render, or
+a path to the \code{.qmd} itself.}
 
-\item{overwrite}{Overwrite existing copies in \code{dir}. Defaults to \code{TRUE} so
-the packaged assets stay the single source of truth.}
+\item{overwrite}{Overwrite existing copies in the target directory. Defaults
+to \code{TRUE} so the packaged assets stay the single source of truth.}
 }
 \value{
 Character vector of the copied file paths, invisibly.
@@ -18,13 +19,16 @@ Character vector of the copied file paths, invisibly.
 \description{
 Copies the shared styling files (\verb{_metadata.yml}, \code{fgcz.scss},
 \code{fgcz_header_quarto.html}, \code{fgcz-plot-finder.html}) from the installed
-package into \code{dir}. Because \verb{_metadata.yml} is directory metadata, any \code{.qmd}
-in \code{dir} then renders with the FGCZ styling (and the search + download
+package into \code{dir}. \code{dir} may be either an existing directory, or an
+existing \code{.qmd} file whose containing directory should receive the assets.
+Because \verb{_metadata.yml} is directory metadata, any \code{.qmd} in the target
+directory then renders with the FGCZ styling (and the search + download
 toolbar) automatically. Call this before rendering, or use \code{\link[=fgcz_render]{fgcz_render()}},
 which calls it for you.
 }
 \examples{
 \dontrun{
 fgcz_copy_assets("path/to/report/dir")
+fgcz_copy_assets("path/to/report.qmd")
 }
 }

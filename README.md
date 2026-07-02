@@ -21,6 +21,10 @@ Best when you render with the `quarto` CLI.
 quarto add prolfqua/fgczquartotemplate
 ```
 
+This creates `_extensions/fgczquartotemplate/` in the project. Without that
+extension directory, `format: fgczquartotemplate-html` will fail because Quarto
+cannot resolve the custom format.
+
 **Step 2.** In your report's YAML header:
 
 ```yaml
@@ -58,14 +62,32 @@ title: "My report"
 ---
 ```
 
-**Step 3.** Stage the styling next to the report, then render:
+**Step 3.** Render with the one-call helper:
 
 ```r
 fgczquartotemplate::fgcz_render("my_report.qmd")
 ```
 
-Done. ✅ (`fgcz_render` copies `_metadata.yml` + `fgcz.scss` + `fgcz_header_quarto.html`
-next to the `.qmd`, which Quarto then applies automatically.)
+Done. ✅ (`fgcz_render` copies `_metadata.yml`, `fgcz.scss`,
+`fgcz_header_quarto.html`, and `fgcz-plot-finder.html` next to the `.qmd`, then
+calls `quarto::quarto_render()`.)
+
+If you want to separate these two steps, copy the assets first and render
+yourself:
+
+```r
+input <- "my_report.qmd"
+fgczquartotemplate::fgcz_copy_assets(input)
+quarto::quarto_render(input)
+```
+
+`fgcz_copy_assets()` accepts either the `.qmd` path above, or an existing
+directory. These two calls are equivalent:
+
+```r
+fgczquartotemplate::fgcz_copy_assets(input)
+fgczquartotemplate::fgcz_copy_assets(dirname(normalizePath(input)))
+```
 
 ---
 
@@ -86,7 +108,8 @@ Both produce the **same** report. They can coexist in one repo.
 
 ```r
 fgcz_render("report.qmd")               # stage assets + render (the usual one)
-fgcz_copy_assets("dir")                 # just stage the 3 files into dir
+fgcz_copy_assets("report.qmd")          # stage assets next to that file
+fgcz_copy_assets("dir")                 # or stage assets into an existing dir
 fgcz_use_template("dir", "report.qmd")  # start a new report from the template
 fgcz_quarto_dir()                       # where the installed assets live
 ```
