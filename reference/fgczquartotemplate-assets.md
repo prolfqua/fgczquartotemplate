@@ -20,6 +20,11 @@ share one look and feel:
 
   FGCZ header injected via `include-in-header`.
 
+- `fgcz-plot-finder.html`:
+
+  Right-edge search + download toolbar, injected via
+  `include-after-body`.
+
 - `template.qmd`:
 
   A generic starter report demonstrating the tabset,
@@ -27,10 +32,11 @@ share one look and feel:
 
 Because `_metadata.yml` is applied by directory, a `.qmd` rendered with
 a plain `quarto render` picks up the FGCZ styling with **no package
-involved and no front-matter reference** – as long as these three files
-sit in the same directory. The `_metadata.yml` references `fgcz.scss`
-and `fgcz_header_quarto.html` by bare filename, which Quarto resolves
-relative to the input `.qmd`, so all three must travel together; see
+involved and no front-matter reference** – as long as the styling files
+sit in the same directory. The `_metadata.yml` references `fgcz.scss`,
+`fgcz_header_quarto.html` and `fgcz-plot-finder.html` by bare filename,
+which Quarto resolves relative to the input `.qmd`, so they must travel
+together; see
 [`fgcz_copy_assets()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_copy_assets.md)
 and
 [`fgcz_render()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.md).

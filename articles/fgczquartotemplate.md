@@ -42,7 +42,8 @@ The assets live under `inst/quarto/`:
 ``` r
 list.files(fgcz_quarto_dir())
 #> [1] "_metadata.yml"           "fgcz_header_quarto.html"
-#> [3] "fgcz.scss"               "template.qmd"
+#> [3] "fgcz-plot-finder.html"   "fgcz.scss"              
+#> [5] "template.qmd"
 ```
 
 | File                      | Role                                                                            |
@@ -72,6 +73,7 @@ writeLines(head(readLines(fgcz_quarto_dir("_metadata.yml")), 30))
 #> format:
 #>   html:
 #>     embed-resources: true
+#>     self-contained: true
 #>     smooth-scroll: true
 #>     page-layout: full
 #> 
@@ -131,9 +133,9 @@ dir.create(dir, showWarnings = FALSE)
 staged <- fgcz_copy_assets(dir)
 basename(staged)
 #> [1] "_metadata.yml"           "fgcz.scss"              
-#> [3] "fgcz_header_quarto.html"
+#> [3] "fgcz_header_quarto.html" "fgcz-plot-finder.html"
 file.exists(staged)
-#> [1] TRUE TRUE TRUE
+#> [1] TRUE TRUE TRUE TRUE
 ```
 
 ## Bootstrapping a new report
@@ -148,7 +150,8 @@ qmd <- fgcz_use_template(file.path(tempdir(), "new-report"),
                          overwrite = TRUE)
 list.files(dirname(qmd))
 #> [1] "_metadata.yml"           "fgcz_header_quarto.html"
-#> [3] "fgcz.scss"               "my_report.qmd"
+#> [3] "fgcz-plot-finder.html"   "fgcz.scss"              
+#> [5] "my_report.qmd"
 ```
 
 ## Rendering

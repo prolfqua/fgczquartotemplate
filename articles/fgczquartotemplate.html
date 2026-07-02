@@ -91,7 +91,8 @@ repo.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="../reference/fgcz_quarto_dir.html">fgcz_quarto_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "_metadata.yml"           "fgcz_header_quarto.html"</span></span>
-<span><span class="co">#&gt; [3] "fgcz.scss"               "template.qmd"</span></span></code></pre></div>
+<span><span class="co">#&gt; [3] "fgcz-plot-finder.html"   "fgcz.scss"              </span></span>
+<span><span class="co">#&gt; [5] "template.qmd"</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="50%">
@@ -144,6 +145,7 @@ filename</strong>:</p>
 <span><span class="co">#&gt; format:</span></span>
 <span><span class="co">#&gt;   html:</span></span>
 <span><span class="co">#&gt;     embed-resources: true</span></span>
+<span><span class="co">#&gt;     self-contained: true</span></span>
 <span><span class="co">#&gt;     smooth-scroll: true</span></span>
 <span><span class="co">#&gt;     page-layout: full</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -196,9 +198,9 @@ they landed:</p>
 <span><span class="va">staged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">staged</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "_metadata.yml"           "fgcz.scss"              </span></span>
-<span><span class="co">#&gt; [3] "fgcz_header_quarto.html"</span></span>
+<span><span class="co">#&gt; [3] "fgcz_header_quarto.html" "fgcz-plot-finder.html"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">staged</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] TRUE TRUE TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] TRUE TRUE TRUE TRUE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="bootstrapping-a-new-report">Bootstrapping a new report<a class="anchor" aria-label="anchor" href="#bootstrapping-a-new-report"></a>
@@ -212,7 +214,8 @@ assets it needs, so you have a runnable report in one call:</p>
 <span>                         overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">qmd</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "_metadata.yml"           "fgcz_header_quarto.html"</span></span>
-<span><span class="co">#&gt; [3] "fgcz.scss"               "my_report.qmd"</span></span></code></pre></div>
+<span><span class="co">#&gt; [3] "fgcz-plot-finder.html"   "fgcz.scss"              </span></span>
+<span><span class="co">#&gt; [5] "my_report.qmd"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="rendering">Rendering<a class="anchor" aria-label="anchor" href="#rendering"></a>
