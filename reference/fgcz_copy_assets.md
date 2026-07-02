@@ -2,8 +2,8 @@
 
 Copies the shared styling files (`_metadata.yml`, `fgcz.scss`,
 `fgcz_header_quarto.html`, `fgcz-plot-finder.html`) from the installed
-package into `dir`. `dir` may be either an existing directory, or an
-existing `.qmd` file whose containing directory should receive the
+package next to a report. `path` may be either an existing directory, or
+an existing `.qmd` file whose containing directory should receive the
 assets. Because `_metadata.yml` is directory metadata, any `.qmd` in the
 target directory then renders with the FGCZ styling (and the search +
 download toolbar) automatically. Call this before rendering, or use
@@ -13,15 +13,15 @@ which calls it for you.
 ## Usage
 
 ``` r
-fgcz_copy_assets(dir, overwrite = TRUE)
+fgcz_copy_assets(path, overwrite = TRUE)
 ```
 
 ## Arguments
 
-- dir:
+- path:
 
-  Directory that contains (or will contain) the `.qmd` to render, or a
-  path to the `.qmd` itself.
+  An existing directory to stage the assets into, or a path to the
+  `.qmd` itself (assets go into its containing directory).
 
 - overwrite:
 
