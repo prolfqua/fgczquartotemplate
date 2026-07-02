@@ -60,8 +60,9 @@ because of its reserved name – reports need no reference to it.</p></dd>
 <code>include-in-header</code>.</p></dd>
 
 <dt><code>fgcz-plot-finder.html</code></dt>
-<dd><p>Right-edge search + download toolbar,
-injected via <code>include-after-body</code>.</p></dd>
+<dd><p>Right-edge search + download toolbar.
+Opt-in: staged next to every report but only injected (via
+<code>include-after-body</code>) when asked for, e.g. <code>fgcz_render(buttons = TRUE)</code>.</p></dd>
 
 <dt><code>template.qmd</code></dt>
 <dd><p>A generic starter report demonstrating the tabset,
@@ -71,10 +72,11 @@ figure-with-callout, and nesting patterns.</p></dd>
 </dl><p>Because <code>_metadata.yml</code> is applied by directory, a <code>.qmd</code> rendered with a
 plain <code>quarto render</code> picks up the FGCZ styling with <strong>no package involved
 and no front-matter reference</strong> – as long as the styling files sit in the
-same directory. The <code>_metadata.yml</code> references <code>fgcz.scss</code>,
-<code>fgcz_header_quarto.html</code> and <code>fgcz-plot-finder.html</code> by bare filename, which
-Quarto resolves relative to the input <code>.qmd</code>, so they must travel together;
-see <code><a href="fgcz_copy_assets.html">fgcz_copy_assets()</a></code> and <code><a href="fgcz_render.html">fgcz_render()</a></code>.</p>
+same directory. The <code>_metadata.yml</code> references <code>fgcz.scss</code> and
+<code>fgcz_header_quarto.html</code> by bare filename, which Quarto resolves relative to
+the input <code>.qmd</code>, so they must travel together; see <code><a href="fgcz_copy_assets.html">fgcz_copy_assets()</a></code> and
+<code><a href="fgcz_render.html">fgcz_render()</a></code>. The toolbar (<code>fgcz-plot-finder.html</code>) is staged too but is
+opt-in – enable it with <code>fgcz_render(buttons = TRUE)</code>.</p>
     </div>
 
   </main></div>

@@ -22,8 +22,9 @@ share one look and feel:
 
 - `fgcz-plot-finder.html`:
 
-  Right-edge search + download toolbar, injected via
-  `include-after-body`.
+  Right-edge search + download toolbar. Opt-in: staged next to every
+  report but only injected (via `include-after-body`) when asked for,
+  e.g. `fgcz_render(buttons = TRUE)`.
 
 - `template.qmd`:
 
@@ -33,10 +34,11 @@ share one look and feel:
 Because `_metadata.yml` is applied by directory, a `.qmd` rendered with
 a plain `quarto render` picks up the FGCZ styling with **no package
 involved and no front-matter reference** – as long as the styling files
-sit in the same directory. The `_metadata.yml` references `fgcz.scss`,
-`fgcz_header_quarto.html` and `fgcz-plot-finder.html` by bare filename,
-which Quarto resolves relative to the input `.qmd`, so they must travel
-together; see
+sit in the same directory. The `_metadata.yml` references `fgcz.scss`
+and `fgcz_header_quarto.html` by bare filename, which Quarto resolves
+relative to the input `.qmd`, so they must travel together; see
 [`fgcz_copy_assets()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_copy_assets.md)
 and
 [`fgcz_render()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.md).
+The toolbar (`fgcz-plot-finder.html`) is staged too but is opt-in –
+enable it with `fgcz_render(buttons = TRUE)`.

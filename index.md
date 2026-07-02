@@ -1,8 +1,8 @@
 # fgczquartotemplate
 
 One shared **FGCZ look-and-feel** for Quarto reports (theme + header +
-defaults), reusable across `ezRun`, `prolfqua`, `prolfquapp`, …. Every
-report also gets a right-edge **🔍 Find / 📥 Save toolbar** — search any
+defaults), reusable across `ezRun`, `prolfqua`, `prolfquapp`, …. Reports
+can opt in to a right-edge **🔍 Find / 📥 Save toolbar** — search any
 figure or table, or bundle the plots into a ZIP.
 
 **👉 [See a live example
@@ -44,6 +44,13 @@ quarto render my_report.qmd
 
 Done. ✅
 
+**Optional — 🔍 Find / 📥 Save toolbar** (off by default). Switch it on
+per report by adding one line to the header:
+
+``` yaml
+include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+```
+
 ------------------------------------------------------------------------
 
 ## Way 2 — R helper (stage files, then render)
@@ -69,13 +76,16 @@ title: "My report"
 **Step 3.** Render with the one-call helper:
 
 ``` r
-fgczquartotemplate::fgcz_render("my_report.qmd")
+fgczquartotemplate::fgcz_render("my_report.qmd")                 # no toolbar
+fgczquartotemplate::fgcz_render("my_report.qmd", buttons = TRUE) # 🔍 Find / 📥 Save
 ```
 
 Done. ✅ (`fgcz_render` copies `_metadata.yml`, `fgcz.scss`,
 `fgcz_header_quarto.html`, and `fgcz-plot-finder.html` next to the
 `.qmd`, then calls
-[`quarto::quarto_render()`](https://quarto-dev.github.io/quarto-r/reference/quarto_render.html).)
+[`quarto::quarto_render()`](https://quarto-dev.github.io/quarto-r/reference/quarto_render.html).
+The toolbar is staged either way but only wired in when
+`buttons = TRUE`.)
 
 If you want to separate these two steps, copy the assets first and
 render yourself:
@@ -114,6 +124,7 @@ Both produce the **same** report. They can coexist in one repo.
 
 ``` r
 fgcz_render("report.qmd")               # stage assets + render (the usual one)
+fgcz_render("report.qmd", buttons = TRUE) # ...plus the 🔍 Find / 📥 Save toolbar
 fgcz_copy_assets("report.qmd")          # stage assets next to that file
 fgcz_copy_assets("dir")                 # or stage assets into an existing dir
 fgcz_use_template("dir", "report.qmd")  # start a new report from the template
