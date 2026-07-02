@@ -35,9 +35,7 @@
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
-</form></li>
+<li class="nav-item"><a class="nav-link" href="example-report.html">Example report</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/prolfqua/fgczquartotemplate/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -49,112 +47,119 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="fgczquartotemplate">fgczquartotemplate<a class="anchor" aria-label="anchor" href="#fgczquartotemplate"></a>
 </h1></div>
-<p>Shared <strong>Quarto report assets</strong> for FGCZ analysis packages (<code>ezRun</code>, <code>prolfqua</code>, …). It packages one common look-and-feel — a directory-level <code>_metadata.yml</code>, an SCSS theme, and an HTML header — plus a starter report template and small helpers to stage those files next to a <code>.qmd</code> and render it.</p>
-<p>The goal: keep the FGCZ report styling in <strong>one place</strong> so every package that produces Quarto reports shares it and a theme change is a single package bump.</p>
+<p>One shared <strong>FGCZ look-and-feel</strong> for Quarto reports (theme + header + defaults), reusable across <code>ezRun</code>, <code>prolfqua</code>, <code>prolfquapp</code>, …</p>
+<p><strong>👉 <a href="https://prolfqua.github.io/fgczquartotemplate/example-report.html">See a live example report</a></strong> — the real layout, tabsets, and figures.</p>
+<p>There are <strong>two ways</strong> to use it. Pick one.</p>
+<hr>
 <div class="section level2">
-<h2 id="whats-inside">What’s inside<a class="anchor" aria-label="anchor" href="#whats-inside"></a>
+<h2 id="way-1--quarto-extension-plain-quarto-render-no-r">Way 1 — Quarto extension (plain <code>quarto render</code>, no R)<a class="anchor" aria-label="anchor" href="#way-1--quarto-extension-plain-quarto-render-no-r"></a>
 </h2>
-<p>Installed under <code>inst/quarto/</code>:</p>
+<p>Best when you render with the <code>quarto</code> CLI.</p>
+<p><strong>Step 1.</strong> In your project, once:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">quarto</span> add prolfqua/fgczquartotemplate</span></code></pre></div>
+<p><strong>Step 2.</strong> In your report’s YAML header:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My report"</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> fgczquartotemplate-html</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
+<p><strong>Step 3.</strong> Render:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">quarto</span> render my_report.qmd</span></code></pre></div>
+<p>Done. ✅</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="way-2--r-helper-stage-files-then-render">Way 2 — R helper (stage files, then render)<a class="anchor" aria-label="anchor" href="#way-2--r-helper-stage-files-then-render"></a>
+</h2>
+<p>Best when you render from R (e.g. inside a package). <strong>No <code>format:</code> line, no <code>quarto add</code>.</strong></p>
+<p><strong>Step 1.</strong> Install:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"prolfqua/fgczquartotemplate"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Step 2.</strong> Your report’s YAML header — just this, nothing FGCZ-specific:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My report"</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
+<p><strong>Step 3.</strong> Stage the styling next to the report, then render:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"my_report.qmd"</span><span class="op">)</span></span></code></pre></div>
+<p>Done. ✅ (<code>fgcz_render</code> copies <code>_metadata.yml</code> + <code>fgcz.scss</code> + <code>fgcz_header_quarto.html</code> next to the <code>.qmd</code>, which Quarto then applies automatically.)</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="which-one">Which one?<a class="anchor" aria-label="anchor" href="#which-one"></a>
+</h2>
 <table class="table">
 <colgroup>
-<col width="50%">
-<col width="50%">
+<col width="33%">
+<col width="33%">
+<col width="33%">
 </colgroup>
 <thead><tr class="header">
-<th>File</th>
-<th>Role</th>
+<th></th>
+<th>Way 1 — Extension</th>
+<th>Way 2 — R helper</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code>_metadata.yml</code></td>
-<td>Shared format defaults. Quarto applies it <strong>automatically</strong> to every <code>.qmd</code> in its directory — reports need no reference to it.</td>
+<td>Install</td>
+<td>
+<code>quarto add …</code> (once per project)</td>
+<td>
+<code>install_github</code> (once)</td>
 </tr>
 <tr class="even">
-<td><code>fgcz.scss</code></td>
-<td>Theme overrides — tabset/card styling, figure rows.</td>
+<td>YAML</td>
+<td><code>format: fgczquartotemplate-html</code></td>
+<td>nothing</td>
 </tr>
 <tr class="odd">
-<td><code>fgcz_header_quarto.html</code></td>
-<td>FGCZ header, injected via <code>include-in-header</code>.</td>
+<td>Render</td>
+<td><code>quarto render</code></td>
+<td><code><a href="reference/fgcz_render.html">fgczquartotemplate::fgcz_render()</a></code></td>
 </tr>
 <tr class="even">
-<td><code>template.qmd</code></td>
-<td>Generic starter report demonstrating the tabset, figure+callout, and nesting patterns.</td>
+<td>Use it when</td>
+<td>CLI / non-R pipelines</td>
+<td>rendering from R</td>
 </tr>
 </tbody>
 </table>
+<p>Both produce the <strong>same</strong> report. They can coexist in one repo.</p>
+<hr>
 </div>
 <div class="section level2">
-<h2 id="how-the-styling-attaches-no-front-matter-coupling">How the styling attaches (no front-matter coupling)<a class="anchor" aria-label="anchor" href="#how-the-styling-attaches-no-front-matter-coupling"></a>
-</h2>
-<p>Quarto automatically merges a file named <code>_metadata.yml</code> into every <code>.qmd</code> in its directory and subdirectories. So a report carries <strong>no</strong> <code>metadata-files</code> line and no path to this package — it stays a plain <code>.qmd</code>. As long as the three files above sit in the same directory, a bare</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">quarto</span> render CountQC.qmd</span></code></pre></div>
-<p>renders with full FGCZ styling <strong>even if this package is not installed</strong>.</p>
-<p>The <code>_metadata.yml</code> references <code>fgcz.scss</code> and <code>fgcz_header_quarto.html</code> by bare filename, which Quarto resolves relative to the input <code>.qmd</code>, so all three must travel together. The package’s only job is to <em>stage</em> them next to a <code>.qmd</code> that lives elsewhere — that is what <code><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets()</a></code> / <code><a href="reference/fgcz_render.html">fgcz_render()</a></code> do.</p>
-</div>
-<div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
-</h2>
-<p>Your report’s front matter is just its own params/title — nothing FGCZ-specific:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="at">  </span><span class="fu">reportTitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"CountQC"</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"`r params$reportTitle`"</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
-<p>Render it through the wrapper — the shared assets are staged automatically:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span></span>
-<span>  <span class="st">"CountQC.qmd"</span>,</span>
-<span>  execute_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reportTitle <span class="op">=</span> <span class="st">"CountQC"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>Bootstrap a brand-new report from the starter template:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_use_template.html">fgcz_use_template</a></span><span class="op">(</span><span class="st">"reports/my_analysis"</span>,</span>
-<span>                                      to <span class="op">=</span> <span class="st">"my_analysis.qmd"</span><span class="op">)</span></span>
-<span><span class="co"># edit reports/my_analysis/my_analysis.qmd, then:</span></span>
-<span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"reports/my_analysis/my_analysis.qmd"</span><span class="op">)</span></span></code></pre></div>
-<p>Just need the paths (e.g. to stage assets yourself)?</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_quarto_dir.html">fgcz_quarto_dir</a></span><span class="op">(</span><span class="op">)</span>             <span class="co"># the inst/quarto directory</span></span>
-<span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="st">"some/dir"</span><span class="op">)</span>  <span class="co"># stage the 3 styling files</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="using-it-from-ezrun--prolfqua">Using it from ezRun / prolfqua<a class="anchor" aria-label="anchor" href="#using-it-from-ezrun--prolfqua"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li><p>Add <code>fgczquartotemplate</code> to <code>Imports</code> in the consumer’s <code>DESCRIPTION</code>.</p></li>
-<li><p>Replace ad-hoc <code>quarto_render()</code> calls with <code><a href="reference/fgcz_render.html">fgczquartotemplate::fgcz_render()</a></code>.</p></li>
-<li>
-<p>In the consumer, <strong>git-ignore the staged copies</strong> so the packaged assets remain the single source of truth — add to the render directory’s <code>.gitignore</code>:</p>
-<pre><code>_metadata.yml
-fgcz.scss
-fgcz_header_quarto.html</code></pre>
-</li>
-</ol>
-<p>App-specific reports (e.g. <code>CountQC.qmd</code>, <code>ScSeurat.qmd</code>) stay in their own package; only the shared <em>styling</em> lives here.</p>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="r-helper-cheatsheet-way-2">R helper cheatsheet (Way 2)<a class="anchor" aria-label="anchor" href="#r-helper-cheatsheet-way-2"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># from a local checkout</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"path/to/fgczquartotemplate"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"report.qmd"</span><span class="op">)</span>               <span class="co"># stage assets + render (the usual one)</span></span>
+<span><span class="fu"><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="st">"dir"</span><span class="op">)</span>                 <span class="co"># just stage the 3 files into dir</span></span>
+<span><span class="fu"><a href="reference/fgcz_use_template.html">fgcz_use_template</a></span><span class="op">(</span><span class="st">"dir"</span>, <span class="st">"report.qmd"</span><span class="op">)</span>  <span class="co"># start a new report from the template</span></span>
+<span><span class="fu"><a href="reference/fgcz_quarto_dir.html">fgcz_quarto_dir</a></span><span class="op">(</span><span class="op">)</span>                       <span class="co"># where the installed assets live</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
+<h2 id="why-two-mechanisms-exist-30-second-version">Why two mechanisms exist (30-second version)<a class="anchor" aria-label="anchor" href="#why-two-mechanisms-exist-30-second-version"></a>
 </h2>
+<p>Quarto can’t reach into an installed R package to fetch styling — the files must sit next to the <code>.qmd</code> at render time. Two clean ways to get them there:</p>
 <ul>
 <li>
-<a href="https://quarto.org/" class="external-link">Quarto</a> on <code>PATH</code>
-</li>
-<li>R package <code>quarto</code>
-</li>
+<strong>Extension</strong>: <code>quarto add</code> drops them into <code>_extensions/</code>; you opt in with <code>format:</code>.</li>
+<li>
+<strong><code>_metadata.yml</code></strong>: a file with that exact name is auto-applied to every <code>.qmd</code> in its directory (no <code>format:</code> line); the R helper stages it for you.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="for-maintainers">For maintainers<a class="anchor" aria-label="anchor" href="#for-maintainers"></a>
+</h2>
+<ul>
+<li>Edit <code>fgcz.scss</code> / <code>fgcz_header_quarto.html</code> in <code>inst/quarto/</code>, then run <code>Rscript data-raw/sync_assets.R</code> to mirror them into <code>_extensions/</code>.</li>
+<li>Keep <code>inst/quarto/_metadata.yml</code> and <code>_extensions/fgczquartotemplate/_extension.yml</code> in step (same format options, one flat / one nested under <code>contributes</code>).</li>
+<li>
+<code>Rscript data-raw/render_example.R</code> regenerates the live example report.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>GPL-3 (matching <code>ezRun</code>).</p>
+<p>GPL (&gt;= 3), matching <code>ezRun</code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
