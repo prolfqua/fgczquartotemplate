@@ -7,7 +7,8 @@
   tabs; click one to jump to it. Results are grouped by their report
   location, and section/subsection/tab titles are included in filtering.
   Figure thumbnails reuse the report’s embedded images, so they work
-  offline.
+  offline. The **📥 Save** panel also shows thumbnails for downloadable
+  plots.
 - The search + download toolbar is now **opt-in**.
   [`fgcz_render()`](https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.md)
   gains a `buttons` argument (default `FALSE`); pass `buttons = TRUE` to
