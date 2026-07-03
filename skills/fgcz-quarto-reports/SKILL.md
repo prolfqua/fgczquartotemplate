@@ -116,6 +116,56 @@ long page does not — split that across tabs instead.
 - **Always give a figure a `#| fig-cap:`.** Captions are what the Find toolbar
   indexes and what makes cross-references work.
 
+## Figure captions are searchable scientific labels
+
+Write captions as short scientific labels, not decorative titles. The Find /
+Figures toolbar indexes captions, so a reader should be able to search for the
+biology, assay, metric, or plot type and recognize the right figure from the
+caption alone.
+
+Each caption should usually name:
+
+- the measured quantity or data layer (`log2 intensity`, `protein abundance`,
+  `cell embedding`, `residual density`, ...),
+- what points/lines/curves represent,
+- the x/y axes or visual encoding when it matters,
+- grouping variables such as condition, batch, sample, cluster, or cell type,
+- transformations, normalization, filtering, or subset if those change the
+  interpretation.
+
+Prefer specific captions:
+
+```yaml
+#| fig-cap: >-
+#|   Precursor intensity as a function of acquisition time. Each point is one
+#|   precursor measurement; the x-axis shows acquisition time in minutes and the
+#|   y-axis shows log2 intensity, coloured by sample group.
+```
+
+```yaml
+#| fig-cap: >-
+#|   Density of log2 precursor intensities by condition after median
+#|   normalization. Each curve is one sample; shifts in the density indicate
+#|   global signal differences.
+```
+
+```yaml
+#| fig-cap: >-
+#|   UMAP of filtered cells coloured by annotated cell type. Each point is one
+#|   cell; UMAP axes are embedding coordinates and do not have physical units.
+```
+
+```yaml
+#| fig-cap: >-
+#|   PCA of sample-level protein intensities after normalization. Points are
+#|   samples, coloured by condition and shaped by batch; axis labels report the
+#|   variance explained by PC1 and PC2.
+```
+
+Avoid vague captions such as `"PCA"`, `"UMAP"`, `"Density plot"`, or
+`"Scatter plot"`. They are bad search targets and do not let a reviewer verify
+that the figure is labelled correctly.
+
 ## Interactive figures are the exception
 
 Default to **static** figures (`ggplot`). They are lighter, print cleanly, and —
@@ -153,6 +203,7 @@ tabs meaningful labels.
 - [ ] Two tab levels (a third only if its sub-tabs are identical across siblings)
 - [ ] Each tab fits on a screen (scroll only for the same figure repeated per sample)
 - [ ] Figures small and gridded (`layout-ncol`), each with a `fig-cap`
+- [ ] Captions name the metric, axes/encoding, grouping, and key preprocessing
 - [ ] Static figures unless interactivity is truly needed for readability
 - [ ] Toolbar via `buttons = TRUE` (or `include-after-body`) if wanted — never hand-built
 
