@@ -84,8 +84,42 @@
   /* ── Download-pane bits. ────────────────────────────────────────────── */
   .fgcz-pf-selall { margin: .6rem 1rem .25rem; font-size: .85rem; }
   .fgcz-pf-selall label { cursor: pointer; }
-  .fgcz-dl-row { display: flex; gap: .5rem; align-items: flex-start; cursor: pointer; }
-  .fgcz-dl-row input { margin-top: .2rem; flex: none; }
+  #fgcz-dl-list {
+    display: grid; gap: .6rem; padding: 0 1rem 1rem;
+  }
+  #fgcz-dl-list .fgcz-pf-item {
+    padding: 0; border: 1px solid #dee2e6; border-radius: .5rem;
+    overflow: hidden; background: #fff; min-height: 220px;
+  }
+  #fgcz-dl-list .fgcz-pf-item:hover { border-color: var(--bs-primary, #0b5394); }
+  .fgcz-dl-card {
+    position: relative; display: flex; flex-direction: column;
+    min-height: 220px; cursor: pointer;
+  }
+  .fgcz-dl-card input {
+    position: absolute; top: .45rem; left: .45rem; z-index: 1; margin: 0;
+    box-shadow: 0 0 0 2px #fff; border-radius: .2rem;
+  }
+  .fgcz-dl-thumb {
+    height: 145px; display: flex; align-items: center; justify-content: center;
+    flex: 0 0 145px; min-height: 145px;
+    background: var(--bs-gray-100, #f8f9fa); overflow: hidden;
+  }
+  .fgcz-dl-thumb img, .fgcz-dl-thumb svg { max-width: 100%; max-height: 145px; }
+  .fgcz-dl-thumb.placeholder { color: #adb5bd; font-size: 1.35rem; }
+  .fgcz-dl-meta {
+    flex: 0 0 auto; min-width: 0; padding: .45rem .55rem;
+    border-top: 1px solid #f0f0f0;
+  }
+  .fgcz-dl-meta .lbl {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    font-size: .78rem; font-weight: 600; line-height: 1.25;
+    overflow: hidden; text-overflow: ellipsis; white-space: normal;
+  }
+  .fgcz-dl-meta .crumb {
+    display: block; margin-top: .2rem; font-size: .68rem; color: #6c757d;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
   .fgcz-pf-foot { padding: .75rem 1rem; border-top: 1px solid #dee2e6; }
   .fgcz-pf-dlbtn {
     width: 100%; padding: .5rem; border: none; border-radius: .375rem;
@@ -456,14 +490,22 @@
     DL_INDEX.forEach(function (it, i) {
       var li = document.createElement('li');
       li.className = 'fgcz-pf-item';
-      li.innerHTML =
-        '<label class="fgcz-dl-row">' +
-        '<input type="checkbox" class="fgcz-dl-cb" data-i="' + i + '" checked>' +
-        '<span><span class="lbl">' + escapeHtml(it.label) + '</span>' +
-        (locationText(it)
-          ? '<span class="crumb">' + escapeHtml(locationText(it)) + '</span>'
-          : '') +
-        '</span></label>';
+      var label = document.createElement('label');
+      label.className = 'fgcz-dl-card';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'fgcz-dl-cb';
+      cb.dataset.i = i;
+      cb.checked = true;
+      label.appendChild(cb);
+      label.appendChild(figureThumb(it, 'fgcz-dl-thumb'));
+      var meta = document.createElement('span');
+      meta.className = 'fgcz-dl-meta';
+      var loc = locationText(it);
+      meta.innerHTML = '<span class="lbl">' + escapeHtml(it.label) + '</span>' +
+        (loc ? '<span class="crumb">' + escapeHtml(loc) + '</span>' : '');
+      label.appendChild(meta);
+      li.appendChild(label);
       dlListEl.appendChild(li);
     });
   }
@@ -675,14 +717,9 @@
     return wrap;
   }
 
-  // A small thumbnail for a result: reuse embedded figure images, clone inline
-  // SVGs, or build a compact table preview. Interactive charts have no static
-  // raster, so show a placeholder glyph instead.
-  function tocThumb(it) {
-    if (it.type === 'tbl') return tableThumb(it);
-
+  function figureThumb(it, className) {
     var wrap = document.createElement('div');
-    wrap.className = 'fgcz-toc-thumb';
+    wrap.className = className;
     var el = it.el;
     var img = el.tagName === 'IMG' ? el
       : (el.querySelector ? el.querySelector('img') : null);
@@ -701,6 +738,14 @@
     wrap.className += ' placeholder';
     wrap.textContent = it.interactive ? '📈' : '🖼️';
     return wrap;
+  }
+
+  // A small thumbnail for a result: reuse embedded figure images, clone inline
+  // SVGs, or build a compact table preview. Interactive charts have no static
+  // raster, so show a placeholder glyph instead.
+  function tocThumb(it) {
+    if (it.type === 'tbl') return tableThumb(it);
+    return figureThumb(it, 'fgcz-toc-thumb');
   }
 
   function renderToc(filter) {
