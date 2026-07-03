@@ -54,7 +54,7 @@ from the annotated starter, `fgcz_copy_assets()` just stages the files, and
 `fgcz_quarto_dir()` points at the installed assets.
 
 Either way you get the theme and the FGCZ header for free. The right-edge
-**🔍 Find / 📥 Save** toolbar is opt-in — turn it on with
+**🔍 Find / 🖼️ Figures / 📥 Save** toolbar is opt-in — turn it on with
 `fgcz_render(buttons = TRUE)` (or an `include-after-body:` line for the CLI
 routes); see the last section. Start from `inst/quarto/template.qmd` (via
 `fgcz_use_template()`), which demonstrates every layout pattern below in code.
@@ -131,19 +131,21 @@ readability**, for example:
 
 If a static figure reads fine, keep it static.
 
-## The Find / Save toolbar: opt-in, and don't hand-build it
+## The Find / Figures / Save toolbar: opt-in, and don't hand-build it
 
-The template ships a right-edge toolbar — **🔍 Find** (searchable list of every
-figure and table; clicking one opens the tab it lives in and scrolls to it) and
-**📥 Save** (tick-box download of the static plots as a single ZIP). It is
-**off by default**; switch it on with `fgcz_render(buttons = TRUE)` (or an
-`include-after-body: …/fgcz-plot-finder.html` line for the extension / plain
-`quarto render` routes). When you want it, use that switch — never hand-add
-buttons or a table-of-figures; the template's version is complete and tested.
+The template ships a right-edge toolbar with three tools — **🔍 Find**
+(searchable list of every figure and table; clicking one opens the tab it lives
+in and scrolls to it), **🖼️ Figures** (a graphical table of contents: a
+thumbnail per figure, click to jump to it), and **📥 Save** (tick-box download
+of the static plots as a single ZIP). It is **off by default**; switch it on
+with `fgcz_render(buttons = TRUE)` (or an `include-after-body:
+…/fgcz-plot-finder.html` line for the extension / plain `quarto render` routes).
+When you want it, use that switch — never hand-add buttons, a table-of-figures,
+or a thumbnail gallery; the template's version is complete and tested.
 
 Because the finder indexes figures and tables by their **caption** and their
 **tab breadcrumb**, the same two habits that make a report readable also make
-the finder useful: give every figure/table a clear `fig-cap` / caption, and give
+the finder and the figure gallery useful: give every figure/table a clear `fig-cap` / caption, and give
 tabs meaningful labels.
 
 ## Quick checklist before you ship

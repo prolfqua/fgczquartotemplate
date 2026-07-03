@@ -107,11 +107,44 @@
   .fgcz-pf-dlbtn:hover { filter: brightness(1.1); }
   .fgcz-pf-dlbtn:disabled { opacity: .5; cursor: default; }
   .fgcz-pf-note { font-size: .75rem; color: #6c757d; margin-top: .5rem; }
+
+  /* ── Figure gallery (graphical TOC): a thumbnail per figure. ────────── */
+  .fgcz-toc-panel { width: 440px; }                  /* wider than the lists */
+  #fgcz-toc-search {
+    margin: .75rem 1rem; padding: .4rem .6rem; border: 1px solid #ced4da;
+    border-radius: .375rem; font-size: .9rem;
+  }
+  .fgcz-toc-grid {
+    display: grid; gap: .6rem; align-content: start;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    padding: 0 1rem 1rem; overflow-y: auto; flex: 1;   /* scrolls when long */
+  }
+  .fgcz-toc-cell {
+    border: 1px solid #dee2e6; border-radius: .5rem; overflow: hidden;
+    background: #fff; cursor: pointer; display: flex; flex-direction: column;
+  }
+  .fgcz-toc-cell:hover { border-color: var(--bs-primary, #0b5394); }
+  .fgcz-toc-thumb {
+    height: 110px; display: flex; align-items: center; justify-content: center;
+    background: var(--bs-gray-100, #f8f9fa); overflow: hidden;
+  }
+  .fgcz-toc-thumb img, .fgcz-toc-thumb svg { max-width: 100%; max-height: 110px; }
+  .fgcz-toc-thumb.placeholder { color: #adb5bd; font-size: 1.8rem; }
+  .fgcz-toc-cap { padding: .35rem .5rem; border-top: 1px solid #f0f0f0; }
+  .fgcz-toc-cap .lbl {
+    display: block; font-size: .75rem; font-weight: 500;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .fgcz-toc-cap .crumb {
+    display: block; font-size: .68rem; color: #6c757d;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
 </style>
 
 <!-- Right-edge toolbar -->
 <div class="fgcz-pf-toolbar">
   <button id="fgcz-pf-btn" title="Find a plot or table" aria-label="Find a plot"><span class="ic">🔍</span>Find</button>
+  <button id="fgcz-toc-btn" title="Browse figures as thumbnails" aria-label="Figure gallery"><span class="ic">🖼️</span>Figures</button>
   <button id="fgcz-dl-btn" title="Download plots" aria-label="Download plots"><span class="ic">📥</span>Save</button>
 </div>
 
@@ -142,6 +175,16 @@
       Interactive (plotly) charts aren't listed — export those from their own toolbar.
     </div>
   </div>
+</div>
+
+<!-- FIGURES panel — a graphical table of contents (one thumbnail per figure) -->
+<div id="fgcz-toc-panel" class="fgcz-pf-panel fgcz-toc-panel" aria-hidden="true">
+  <div class="fgcz-pf-head">
+    <h2>Figures</h2>
+    <button class="fgcz-pf-close" data-close="fgcz-toc-panel" aria-label="Close">×</button>
+  </div>
+  <input id="fgcz-toc-search" type="search" placeholder="Filter figures…" />
+  <div id="fgcz-toc-grid" class="fgcz-toc-grid"></div>
 </div>
 
 <script>
@@ -501,10 +544,81 @@
     }
   }
 
+  // ─── FIGURES panel (graphical TOC) ─────────────────────────────────
+
+  var tocGridEl, tocSearchEl, tocPanel, TOC_INDEX = null;
+
+  // A small thumbnail for a figure: reuse the embedded image (a data URI, so it
+  // works offline and CSP-safe) or clone an inline SVG. Interactive charts have
+  // no static raster, so show a placeholder glyph instead.
+  function tocThumb(it) {
+    var wrap = document.createElement('div');
+    wrap.className = 'fgcz-toc-thumb';
+    var el = it.el;
+    var img = el.tagName === 'IMG' ? el
+      : (el.querySelector ? el.querySelector('img') : null);
+    if (!it.interactive && img && img.src) {
+      var t = document.createElement('img');
+      t.src = img.src; t.alt = it.label || 'figure'; t.loading = 'lazy';
+      wrap.appendChild(t);
+      return wrap;
+    }
+    var svg = (el.tagName && el.tagName.toLowerCase() === 'svg') ? el
+      : (el.querySelector ? el.querySelector('svg') : null);
+    if (!it.interactive && svg) {
+      wrap.appendChild(svg.cloneNode(true));
+      return wrap;
+    }
+    wrap.className += ' placeholder';
+    wrap.textContent = it.interactive ? '📈' : '🖼️';
+    return wrap;
+  }
+
+  function renderToc(filter) {
+    filter = (filter || '').toLowerCase();
+    tocGridEl.innerHTML = '';
+    var shown = 0;
+    TOC_INDEX.forEach(function (it) {
+      var hay = (it.label + ' ' + it.crumb.join(' ')).toLowerCase();
+      if (filter && hay.indexOf(filter) === -1) return;
+      shown++;
+      var cell = document.createElement('div');
+      cell.className = 'fgcz-toc-cell';
+      cell.title = it.label;
+      cell.appendChild(tocThumb(it));
+      var cap = document.createElement('div');
+      cap.className = 'fgcz-toc-cap';
+      cap.innerHTML = '<span class="lbl">' + escapeHtml(it.label) + '</span>' +
+        (it.crumb.length
+          ? '<span class="crumb">' + escapeHtml(it.crumb.join(' › ')) + '</span>'
+          : '');
+      cell.appendChild(cap);
+      cell.addEventListener('click', function () { reveal(it.el); });
+      tocGridEl.appendChild(cell);
+    });
+    if (!shown) {
+      var empty = document.createElement('div');
+      empty.className = 'fgcz-pf-empty';
+      empty.textContent = filter ? 'No matches.' : 'No figures found.';
+      tocGridEl.appendChild(empty);
+    }
+  }
+
+  function openToc() {
+    closeAll();
+    // Figures only (static + interactive), in document order; tables stay in
+    // the Find list. Rebuilt on every open so late-init widgets are included.
+    TOC_INDEX = buildIndex().filter(function (it) { return it.type === 'fig'; });
+    renderToc(tocSearchEl.value);
+    tocPanel.classList.add('open');
+    tocPanel.setAttribute('aria-hidden', 'false');
+    tocSearchEl.focus();
+  }
+
   // ─── shared open/close + wiring ────────────────────────────────────
 
   function closeAll() {
-    [findPanel, dlPanel].forEach(function (p) {
+    [findPanel, dlPanel, tocPanel].forEach(function (p) {
       p.classList.remove('open'); p.setAttribute('aria-hidden', 'true');
     });
   }
@@ -512,18 +626,23 @@
   document.addEventListener('DOMContentLoaded', function () {
     findPanel = document.getElementById('fgcz-pf-panel');
     dlPanel   = document.getElementById('fgcz-dl-panel');
+    tocPanel  = document.getElementById('fgcz-toc-panel');
     listEl    = document.getElementById('fgcz-pf-list');
     searchEl  = document.getElementById('fgcz-pf-search');
     dlListEl  = document.getElementById('fgcz-dl-list');
     dlAllEl   = document.getElementById('fgcz-dl-all');
     dlGoEl    = document.getElementById('fgcz-dl-go');
+    tocGridEl = document.getElementById('fgcz-toc-grid');
+    tocSearchEl = document.getElementById('fgcz-toc-search');
 
     document.getElementById('fgcz-pf-btn').addEventListener('click', openFind);
+    document.getElementById('fgcz-toc-btn').addEventListener('click', openToc);
     document.getElementById('fgcz-dl-btn').addEventListener('click', openDownload);
     document.querySelectorAll('.fgcz-pf-close').forEach(function (b) {
       b.addEventListener('click', closeAll);
     });
     searchEl.addEventListener('input', function () { renderFind(searchEl.value); });
+    tocSearchEl.addEventListener('input', function () { renderToc(tocSearchEl.value); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeAll();
     });
@@ -536,10 +655,12 @@
     });
     dlGoEl.addEventListener('click', doDownload);
 
-    // Show buttons only when there's something to act on.
+    // Show each button only when there's something for it to act on.
     var probe = buildIndex();
+    var figs = probe.filter(function (it) { return it.type === 'fig'; });
     if (!probe.length) document.getElementById('fgcz-pf-btn').style.display = 'none';
-    if (!probe.some(function (it) { return it.type === 'fig' && !it.interactive; })) {
+    if (!figs.length) document.getElementById('fgcz-toc-btn').style.display = 'none';
+    if (!figs.some(function (it) { return !it.interactive; })) {
       document.getElementById('fgcz-dl-btn').style.display = 'none';
     }
   });
