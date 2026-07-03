@@ -34,7 +34,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9000" id="fgczquartotemplate-0009000">fgczquartotemplate 0.0.0.9000<a class="anchor" aria-label="anchor" href="#fgczquartotemplate-0009000"></a></h2>
-<ul><li>The search + download toolbar is now <strong>opt-in</strong>. <code><a href="../reference/fgcz_render.html">fgcz_render()</a></code> gains a <code>buttons</code> argument (default <code>FALSE</code>); pass <code>buttons = TRUE</code> to add the right-edge 🔍 Find / 📥 Save toolbar. It is no longer wired into <code>_metadata.yml</code> or the Quarto extension by default; the extension and plain <code>quarto render</code> routes opt in with an <code>include-after-body:</code> line.</li>
+<ul><li>The opt-in toolbar gains a <strong>🖼️ Figures</strong> button: a graphical table of contents showing a thumbnail of every figure (including figures in inactive tabs); click one to jump to it. It reuses the report’s embedded images, so it works offline.</li>
+<li>The search + download toolbar is now <strong>opt-in</strong>. <code><a href="../reference/fgcz_render.html">fgcz_render()</a></code> gains a <code>buttons</code> argument (default <code>FALSE</code>); pass <code>buttons = TRUE</code> to add the right-edge 🔍 Find / 🖼️ Figures / 📥 Save toolbar. It is no longer wired into <code>_metadata.yml</code> or the Quarto extension by default; the extension and plain <code>quarto render</code> routes opt in with an <code>include-after-body:</code> line.</li>
 <li>
 <code><a href="../reference/fgcz_copy_assets.html">fgcz_copy_assets()</a></code> accepts either an existing directory or a <code>.qmd</code> file path.</li>
 </ul></div>

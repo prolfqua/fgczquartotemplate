@@ -48,8 +48,8 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="fgczquartotemplate">fgczquartotemplate<a class="anchor" aria-label="anchor" href="#fgczquartotemplate"></a>
 </h1></div>
-<p>One shared <strong>FGCZ look-and-feel</strong> for Quarto reports (theme + header + defaults), reusable across <code>ezRun</code>, <code>prolfqua</code>, <code>prolfquapp</code>, …. Reports can opt in to a right-edge <strong>🔍 Find / 📥 Save toolbar</strong> — search any figure or table, or bundle the plots into a ZIP.</p>
-<p><strong>👉 <a href="https://prolfqua.github.io/fgczquartotemplate/example-report.html">See a live example report</a></strong> — the real layout, tabsets, figures, and the Find/Save toolbar.</p>
+<p>One shared <strong>FGCZ look-and-feel</strong> for Quarto reports (theme + header + defaults), reusable across <code>ezRun</code>, <code>prolfqua</code>, <code>prolfquapp</code>, …. Reports can opt in to a right-edge toolbar — <strong>🔍 Find</strong> any figure or table, browse them as a <strong>🖼️ Figures</strong> thumbnail gallery, or <strong>📥 Save</strong> the plots as a ZIP.</p>
+<p><strong>👉 <a href="https://prolfqua.github.io/fgczquartotemplate/example-report.html">See a live example report</a></strong> — the real layout, tabsets, figures, and the Find / Figures / Save toolbar.</p>
 <p>There are <strong>two ways</strong> to use it. Pick one.</p>
 <hr>
 <div class="section level2">
@@ -67,7 +67,7 @@
 <p><strong>Step 3.</strong> Render:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">quarto</span> render my_report.qmd</span></code></pre></div>
 <p>Done. ✅</p>
-<p><strong>Optional — 🔍 Find / 📥 Save toolbar</strong> (off by default). Switch it on per report by adding one line to the header:</p>
+<p><strong>Optional — 🔍 Find / 🖼️ Figures / 📥 Save toolbar</strong> (off by default). Switch it on per report by adding one line to the header:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">include-after-body</span><span class="kw">:</span><span class="at"> _extensions/fgczquartotemplate/fgcz-plot-finder.html</span></span></code></pre></div>
 <hr>
 </div>
@@ -85,7 +85,7 @@
 <p><strong>Step 3.</strong> Render with the one-call helper:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"my_report.qmd"</span><span class="op">)</span>                 <span class="co"># no toolbar</span></span>
-<span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"my_report.qmd"</span>, buttons <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># 🔍 Find / 📥 Save</span></span></code></pre></div>
+<span><span class="fu">fgczquartotemplate</span><span class="fu">::</span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"my_report.qmd"</span>, buttons <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># 🔍 Find / 🖼️ Figures / 📥 Save</span></span></code></pre></div>
 <p>Done. ✅ (<code>fgcz_render</code> copies <code>_metadata.yml</code>, <code>fgcz.scss</code>, <code>fgcz_header_quarto.html</code>, and <code>fgcz-plot-finder.html</code> next to the <code>.qmd</code>, then calls <code><a href="https://quarto-dev.github.io/quarto-r/reference/quarto_render.html" class="external-link">quarto::quarto_render()</a></code>. The toolbar is staged either way but only wired in when <code>buttons = TRUE</code>.)</p>
 <p>If you want to separate these two steps, copy the assets first and render yourself:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -145,7 +145,7 @@
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"report.qmd"</span><span class="op">)</span>               <span class="co"># stage assets + render (the usual one)</span></span>
-<span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"report.qmd"</span>, buttons <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># ...plus the 🔍 Find / 📥 Save toolbar</span></span>
+<span><span class="fu"><a href="reference/fgcz_render.html">fgcz_render</a></span><span class="op">(</span><span class="st">"report.qmd"</span>, buttons <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># ...plus the 🔍 Find / 🖼️ Figures / 📥 Save toolbar</span></span>
 <span><span class="fu"><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="st">"report.qmd"</span><span class="op">)</span>          <span class="co"># stage assets next to that file</span></span>
 <span><span class="fu"><a href="reference/fgcz_copy_assets.html">fgcz_copy_assets</a></span><span class="op">(</span><span class="st">"dir"</span><span class="op">)</span>                 <span class="co"># or stage assets into an existing dir</span></span>
 <span><span class="fu"><a href="reference/fgcz_use_template.html">fgcz_use_template</a></span><span class="op">(</span><span class="st">"dir"</span>, <span class="st">"report.qmd"</span><span class="op">)</span>  <span class="co"># start a new report from the template</span></span>

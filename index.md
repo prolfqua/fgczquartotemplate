@@ -2,12 +2,14 @@
 
 One shared **FGCZ look-and-feel** for Quarto reports (theme + header +
 defaults), reusable across `ezRun`, `prolfqua`, `prolfquapp`, …. Reports
-can opt in to a right-edge **🔍 Find / 📥 Save toolbar** — search any
-figure or table, or bundle the plots into a ZIP.
+can opt in to a right-edge toolbar — **🔍 Find** any figure or table,
+browse them as a **🖼️ Figures** thumbnail gallery, or **📥 Save** the
+plots as a ZIP.
 
 **👉 [See a live example
 report](https://prolfqua.github.io/fgczquartotemplate/example-report.html)**
-— the real layout, tabsets, figures, and the Find/Save toolbar.
+— the real layout, tabsets, figures, and the Find / Figures / Save
+toolbar.
 
 There are **two ways** to use it. Pick one.
 
@@ -44,8 +46,8 @@ quarto render my_report.qmd
 
 Done. ✅
 
-**Optional — 🔍 Find / 📥 Save toolbar** (off by default). Switch it on
-per report by adding one line to the header:
+**Optional — 🔍 Find / 🖼️ Figures / 📥 Save toolbar** (off by default).
+Switch it on per report by adding one line to the header:
 
 ``` yaml
 include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
@@ -77,7 +79,7 @@ title: "My report"
 
 ``` r
 fgczquartotemplate::fgcz_render("my_report.qmd")                 # no toolbar
-fgczquartotemplate::fgcz_render("my_report.qmd", buttons = TRUE) # 🔍 Find / 📥 Save
+fgczquartotemplate::fgcz_render("my_report.qmd", buttons = TRUE) # 🔍 Find / 🖼️ Figures / 📥 Save
 ```
 
 Done. ✅ (`fgcz_render` copies `_metadata.yml`, `fgcz.scss`,
@@ -124,7 +126,7 @@ Both produce the **same** report. They can coexist in one repo.
 
 ``` r
 fgcz_render("report.qmd")               # stage assets + render (the usual one)
-fgcz_render("report.qmd", buttons = TRUE) # ...plus the 🔍 Find / 📥 Save toolbar
+fgcz_render("report.qmd", buttons = TRUE) # ...plus the 🔍 Find / 🖼️ Figures / 📥 Save toolbar
 fgcz_copy_assets("report.qmd")          # stage assets next to that file
 fgcz_copy_assets("dir")                 # or stage assets into an existing dir
 fgcz_use_template("dir", "report.qmd")  # start a new report from the template
