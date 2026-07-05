@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fgczquartotemplate</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,8 +33,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="fgczquartotemplate-0009000">fgczquartotemplate 0.0.0.9000<a class="anchor" aria-label="anchor" href="#fgczquartotemplate-0009000"></a></h2>
-<ul><li>The opt-in toolbar’s <strong>🔍 Find</strong> button opens a graphical table of contents showing figures and tables, including content in inactive tabs; click one to jump to it. Results are grouped by their report location, and section/subsection/tab titles are included in filtering. Figure thumbnails reuse the report’s embedded images, so they work offline. The <strong>📥 Save</strong> panel also shows thumbnails for downloadable plots.</li>
+<h2 class="pkg-version" data-toc-text="0.0.0.9001" id="fgczquartotemplate-0009001">fgczquartotemplate 0.0.0.9001<a class="anchor" aria-label="anchor" href="#fgczquartotemplate-0009001"></a></h2>
+<ul><li>The opt-in toolbar’s <strong>🔍 Find</strong> panel now opens tabs through Bootstrap’s tab API so htmlwidgets such as DT tables redraw when revealed from inactive tabs.</li>
+<li>The opt-in toolbar’s <strong>🔍 Find</strong> panel now renders Plotly htmlwidgets as thumbnail cards by rasterizing the embedded widget JSON in the browser.</li>
+<li>The opt-in toolbar’s <strong>🔍 Find</strong> panel now uses Quarto figure captions for Plotly htmlwidgets inside figure floats instead of adding duplicate captionless Plotly cards.</li>
+<li>The opt-in toolbar’s <strong>📥 Save</strong> panel now excludes Plotly htmlwidgets inside figure floats from the static-download list.</li>
+<li>The opt-in toolbar’s <strong>🔍 Find</strong> panel now renders DT tables as table preview cards instead of generic figure placeholders.</li>
+<li>The opt-in toolbar’s <strong>🔍 Find</strong> button opens a graphical table of contents showing figures and tables, including content in inactive tabs; click one to jump to it. Results are grouped by their report location, and section/subsection/tab titles are included in filtering. Figure thumbnails reuse the report’s embedded images, so they work offline. The <strong>📥 Save</strong> panel also shows thumbnails for downloadable plots.</li>
 <li>The search + download toolbar is now <strong>opt-in</strong>. <code><a href="../reference/fgcz_render.html">fgcz_render()</a></code> gains a <code>buttons</code> argument (default <code>FALSE</code>); pass <code>buttons = TRUE</code> to add the right-edge 🔍 Find / 📥 Save toolbar. It is no longer wired into <code>_metadata.yml</code> or the Quarto extension by default; the extension and plain <code>quarto render</code> routes opt in with an <code>include-after-body:</code> line.</li>
 <li>
 <code><a href="../reference/fgcz_copy_assets.html">fgcz_copy_assets()</a></code> accepts either an existing directory or a <code>.qmd</code> file path.</li>
