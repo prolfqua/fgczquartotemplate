@@ -238,7 +238,11 @@ density_plot <- ggplot(
   ) +
   theme_bw()
 
-plotly::ggplotly(density_plot, tooltip = c("x", "y", "colour"))
+plotly::ggplotly(
+  density_plot,
+  height = 460,
+  tooltip = c("x", "y", "colour")
+)
 ```
 
 :::
