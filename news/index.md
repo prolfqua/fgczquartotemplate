@@ -1,6 +1,6 @@
 # Changelog
 
-## fgczquartotemplate 0.0.0.9001
+## fgczquartotemplate 0.1.0
 
 - The opt-in toolbar’s **🔍 Find** panel now opens tabs through
   Bootstrap’s tab API so htmlwidgets such as DT tables redraw when
