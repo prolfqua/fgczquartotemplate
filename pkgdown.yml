@@ -1,9 +1,8 @@
+altdoc: 0.7.3
 pandoc: 3.1.3
-pkgdown: 2.2.0
+pkgdown: 2.1.3
 pkgdown_sha: ~
-articles:
-  fgczquartotemplate: fgczquartotemplate.html
-last_built: 2026-07-05T21:36Z
+last_built: 2026-07-09T19:10:20+0000
 urls:
-  reference: https://prolfqua.github.io/fgczquartotemplate/reference
-  article: https://prolfqua.github.io/fgczquartotemplate/articles
+  reference: https://prolfqua.github.io/fgczquartotemplate/man
+  article: https://prolfqua.github.io/fgczquartotemplate/vignettes
