@@ -372,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="using-it-from-a-downstream-package" class="level2"><h2 class="anchored" data-anchor-id="using-it-from-a-downstream-package">Using it from a downstream package</h2>
 <ol type="1">
 <li>Add <code>fgczquartotemplate</code> to <code>Imports</code> (and, since it is distributed on GitHub, <code>Remotes: prolfqua/fgczquartotemplate</code>).</li>
-<li>Replace <code><a href="https://quarto-dev.github.io/quarto-r/reference/quarto_render.html">quarto::quarto_render()</a></code> calls with <code><a href="https://prolfqua.github.io/fgczquartotemplate/reference/fgcz_render.html">fgczquartotemplate::fgcz_render()</a></code>.</li>
+<li>Replace <code><a href="https://quarto-dev.github.io/quarto-r/reference/quarto_render.html">quarto::quarto_render()</a></code> calls with <code><a href="https://prolfqua.github.io/fgczquartotemplate/man/fgcz_render.html">fgczquartotemplate::fgcz_render()</a></code>.</li>
 <li>Leave report front matter free of any styling reference — the staged <code>_metadata.yml</code> attaches automatically.</li>
 <li>Git-ignore the staged copies (<code>_metadata.yml</code>, <code>fgcz.scss</code>, <code>fgcz_header_quarto.html</code>) in the render directory so the packaged assets remain the single source of truth.</li>
 </ol>
