@@ -1,4 +1,4 @@
-name: pkgdown
+name: altdoc
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  pkgdown:
+  altdoc:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -25,25 +25,28 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            any::pkgdown
-            any::yaml
+            any::altdoc
+            any::rmarkdown
+            any::knitr
+            any::DT
+            any::ggplot2
+            any::plotly
           needs: website
 
-      - name: Check extension assets are in sync
+      - name: Verify extension assets are in sync
         run: |
           Rscript data-raw/sync_assets.R
-          if [ -n "$(git status --porcelain -- _extensions)" ]; then
-            echo "::error::_extensions is out of sync with inst/quarto — run data-raw/sync_assets.R and commit"
-            git status --porcelain -- _extensions
+          if [ -n "$(git status --porcelain -- _extensions vignettes/_extensions)" ]; then
+            echo "::error::extension out of sync with inst/quarto — run data-raw/sync_assets.R and commit"
+            git --no-pager diff -- _extensions vignettes/_extensions
             exit 1
           fi
 
-      - name: Render live example report
-        run: Rscript data-raw/render_example.R
+      - name: Install package
+        run: R CMD INSTALL .
 
-      - name: Build pkgdown site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = TRUE)
-        shell: Rscript {0}
+      - name: Build docs with altdoc
+        run: Rscript -e 'altdoc::render_docs(freeze = FALSE)'
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

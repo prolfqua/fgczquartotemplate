@@ -1,5 +1,14 @@
 # fgczquartotemplate 0.1.0
 
+* The documentation website is now built with
+  [altdoc](https://altdoc.etiennebacher.com/) (Quarto Website backend) instead of
+  pkgdown. pkgdown mangles Quarto `panel-tabset`s (its `tweak_tabsets` step crashes
+  on them), whereas altdoc renders vignettes natively through Quarto with the
+  tabsets intact.
+* The FGCZ layout demo now ships as a rendered vignette
+  (`vignettes/example-report.qmd`), built with `format: fgczquartotemplate-html`
+  from the vendored `vignettes/_extensions/`, and is shown on the documentation
+  site with its nested tabsets preserved.
 * The `fgcz-quarto-reports` skill's caption guidance now includes a concrete
   before/after example: a negative (decorative, unsearchable) figure caption
   contrasted with a positive one that names the statistics, panels, axes, and
