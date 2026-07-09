@@ -143,48 +143,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vignettes/fgczquartotemplate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Using the FGCZ Quarto report templates</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
- <span class="menu-text">Reference</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_copy_assets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_copy_assets</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_quarto_dir.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_quarto_dir</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_render.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_render</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_use_template.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_use_template</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgczquartotemplate-assets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgczquartotemplate-assets</span></a>
+ <span class="menu-text">Using the FGCZ Quarto report template</span></a>
   </div>
 </li>
       </ul>
@@ -224,6 +183,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="fgczquartotemplate-0.1.0" class="level1">
 <h1>fgczquartotemplate 0.1.0</h1>
 <ul>
+<li>The package is now a pure Quarto <strong>format extension plus a demo vignette</strong>. The R staging helpers (<code>fgcz_render</code>, <code>fgcz_copy_assets</code>, <code>fgcz_use_template</code>, <code>fgcz_quarto_dir</code>), the <code>inst/quarto/</code> asset copy, and the <code>data-raw/</code> sync script have been removed; the single source of the extension is <code>_extensions/fgczquartotemplate/</code> (what <code>quarto add</code> fetches), mirrored into the demo vignette via <code>make sync</code>. Downstream reports select the styling with <code>format: fgczquartotemplate-html</code> (or by vendoring <code>_extensions/</code>) — no R call is needed.</li>
 <li>The documentation website is now built with <a href="https://altdoc.etiennebacher.com/">altdoc</a> (Quarto Website backend) instead of pkgdown. pkgdown mangles Quarto <code>panel-tabset</code>s (its <code>tweak_tabsets</code> step crashes on them), whereas altdoc renders vignettes natively through Quarto with the tabsets intact.</li>
 <li>The FGCZ layout demo now ships as a rendered vignette (<code>vignettes/example-report.qmd</code>), built with <code>format: fgczquartotemplate-html</code> from the vendored <code>vignettes/_extensions/</code>, and is shown on the documentation site with its nested tabsets preserved.</li>
 <li>The <code>fgcz-quarto-reports</code> skill’s caption guidance now includes a concrete before/after example: a negative (decorative, unsearchable) figure caption contrasted with a positive one that names the statistics, panels, axes, and diagnostic reading.</li>

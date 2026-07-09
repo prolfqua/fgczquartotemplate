@@ -178,48 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vignettes/fgczquartotemplate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Using the FGCZ Quarto report templates</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
- <span class="menu-text">Reference</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_copy_assets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_copy_assets</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_quarto_dir.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_quarto_dir</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_render.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_render</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgcz_use_template.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgcz_use_template</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./man/fgczquartotemplate-assets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgczquartotemplate-assets</span></a>
+ <span class="menu-text">Using the FGCZ Quarto report template</span></a>
   </div>
 </li>
       </ul>
@@ -260,14 +219,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>fgczquartotemplate</h1>
 <p>One shared <strong>FGCZ look-and-feel</strong> for Quarto reports (theme + header + defaults), reusable across <code>ezRun</code>, <code>prolfqua</code>, <code>prolfquapp</code>, …. Reports can opt in to a right-edge toolbar — <strong>🔍 Find</strong> any figure or table, browse them as a <strong>🖼️ Figures</strong> thumbnail gallery, or <strong>📥 Save</strong> the plots as a ZIP.</p>
 <p><strong>👉 <a href="https://prolfqua.github.io/fgczquartotemplate/">See the documentation site</a></strong> — including a live example report with the real layout, tabsets, figures, and the Find / Figures / Save toolbar.</p>
-<p>There are <strong>two ways</strong> to use it. Pick one.</p>
+<p><code>fgczquartotemplate</code> is a <strong>Quarto format extension</strong>: add it once per project, then select it in any report’s YAML header.</p>
 <hr>
-<section id="way-1-quarto-extension-plain-quarto-render-no-r" class="level2">
-<h2 class="anchored" data-anchor-id="way-1-quarto-extension-plain-quarto-render-no-r">Way 1 — Quarto extension (plain <code>quarto render</code>, no R)</h2>
-<p>Best when you render with the <code>quarto</code> CLI.</p>
+<section id="use-it" class="level2">
+<h2 class="anchored" data-anchor-id="use-it">Use it</h2>
 <p><strong>Step 1.</strong> In your project, once:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> add prolfqua/fgczquartotemplate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This creates <code>_extensions/fgczquartotemplate/</code> in the project. Without that extension directory, <code>format: fgczquartotemplate-html</code> will fail because Quarto cannot resolve the custom format.</p>
+<p>This creates <code>_extensions/fgczquartotemplate/</code> in the project. Without that extension directory, <code>format: fgczquartotemplate-html</code> fails because Quarto cannot resolve the custom format.</p>
 <p><strong>Step 2.</strong> In your report’s YAML header:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My report"</span></span>
@@ -277,95 +235,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render my_report.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Done. ✅</p>
 <p><strong>Optional — 🔍 Find / 🖼️ Figures / 📥 Save toolbar</strong> (off by default). Switch it on per report by adding one line to the header:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include-after-body</span><span class="kw">:</span><span class="at"> _extensions/fgczquartotemplate/fgcz-plot-finder.html</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">fgczquartotemplate-html</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">include-after-body</span><span class="kw">:</span><span class="at"> _extensions/fgczquartotemplate/fgcz-plot-finder.html</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
-<section id="way-2-r-helper-stage-files-then-render" class="level2">
-<h2 class="anchored" data-anchor-id="way-2-r-helper-stage-files-then-render">Way 2 — R helper (stage files, then render)</h2>
-<p>Best when you render from R (e.g.&nbsp;inside a package). <strong>No <code>format:</code> line, no <code>quarto add</code>.</strong></p>
-<p><strong>Step 1.</strong> Install:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"prolfqua/fgczquartotemplate"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Step 2.</strong> Your report’s YAML header — just this, nothing FGCZ-specific:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My report"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Step 3.</strong> Render with the one-call helper:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fgczquartotemplate<span class="sc">::</span><span class="fu">fgcz_render</span>(<span class="st">"my_report.qmd"</span>)                 <span class="co"># no toolbar</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fgczquartotemplate<span class="sc">::</span><span class="fu">fgcz_render</span>(<span class="st">"my_report.qmd"</span>, <span class="at">buttons =</span> <span class="cn">TRUE</span>) <span class="co"># 🔍 Find / 🖼️ Figures / 📥 Save</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Done. ✅ (<code>fgcz_render</code> copies <code>_metadata.yml</code>, <code>fgcz.scss</code>, <code>fgcz_header_quarto.html</code>, and <code>fgcz-plot-finder.html</code> next to the <code>.qmd</code>, then calls <code>quarto::quarto_render()</code>. The toolbar is staged either way but only wired in when <code>buttons = TRUE</code>.)</p>
-<p>If you want to separate these two steps, copy the assets first and render yourself:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="st">"my_report.qmd"</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fgczquartotemplate<span class="sc">::</span><span class="fu">fgcz_copy_assets</span>(input)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>quarto<span class="sc">::</span><span class="fu">quarto_render</span>(input)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>fgcz_copy_assets()</code> accepts either the <code>.qmd</code> path above, or an existing directory. These two calls are equivalent:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fgczquartotemplate<span class="sc">::</span><span class="fu">fgcz_copy_assets</span>(input)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fgczquartotemplate<span class="sc">::</span><span class="fu">fgcz_copy_assets</span>(<span class="fu">dirname</span>(<span class="fu">normalizePath</span>(input)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<hr>
+<section id="vendoring-in-an-r-package" class="level2">
+<h2 class="anchored" data-anchor-id="vendoring-in-an-r-package">Vendoring in an R package</h2>
+<p>Downstream R packages that build reports at install or render time can <strong>vendor</strong> the extension instead of running <code>quarto add</code>: copy <code>_extensions/fgczquartotemplate/</code> into the report’s directory (e.g. <code>vignettes/_extensions/</code>) and commit it, so the styling travels with the package. This repo’s own <code>vignettes/example-report.qmd</code> does exactly that.</p>
 </section>
-<section id="which-one" class="level2">
-<h2 class="anchored" data-anchor-id="which-one">Which one?</h2>
+<section id="whats-in-the-extension" class="level2">
+<h2 class="anchored" data-anchor-id="whats-in-the-extension">What’s in the extension</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 50%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th>Way 1 — Extension</th>
-<th>Way 2 — R helper</th>
+<th>File</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Install</td>
-<td><code>quarto add …</code> (once per project)</td>
-<td><code>install_github</code> (once)</td>
+<td><code>_extension.yml</code></td>
+<td>Declares the <code>fgczquartotemplate-html</code> format and its options.</td>
 </tr>
 <tr class="even">
-<td>YAML</td>
-<td><code>format: fgczquartotemplate-html</code></td>
-<td>nothing</td>
+<td><code>fgcz.scss</code></td>
+<td>Theme overrides — tabset / card styling, figure rows.</td>
 </tr>
 <tr class="odd">
-<td>Render</td>
-<td><code>quarto render</code></td>
-<td><code>fgczquartotemplate::fgcz_render()</code></td>
+<td><code>fgcz_header_quarto.html</code></td>
+<td>The FGCZ header, injected via <code>include-in-header</code>.</td>
 </tr>
 <tr class="even">
-<td>Use it when</td>
-<td>CLI / non-R pipelines</td>
-<td>rendering from R</td>
+<td><code>fgcz-plot-finder.html</code></td>
+<td>The opt-in 🔍 Find / 🖼️ Figures / 📥 Save toolbar.</td>
 </tr>
 </tbody>
 </table>
-<p>Both produce the <strong>same</strong> report. They can coexist in one repo.</p>
-<hr>
-</section>
-<section id="r-helper-cheatsheet-way-2" class="level2">
-<h2 class="anchored" data-anchor-id="r-helper-cheatsheet-way-2">R helper cheatsheet (Way 2)</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(<span class="st">"report.qmd"</span>)               <span class="co"># stage assets + render (the usual one)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(<span class="st">"report.qmd"</span>, <span class="at">buttons =</span> <span class="cn">TRUE</span>) <span class="co"># ...plus the 🔍 Find / 🖼️ Figures / 📥 Save toolbar</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_copy_assets</span>(<span class="st">"report.qmd"</span>)          <span class="co"># stage assets next to that file</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_copy_assets</span>(<span class="st">"dir"</span>)                 <span class="co"># or stage assets into an existing dir</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_use_template</span>(<span class="st">"dir"</span>, <span class="st">"report.qmd"</span>)  <span class="co"># start a new report from the template</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_quarto_dir</span>()                       <span class="co"># where the installed assets live</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="why-two-mechanisms-exist-30-second-version" class="level2">
-<h2 class="anchored" data-anchor-id="why-two-mechanisms-exist-30-second-version">Why two mechanisms exist (30-second version)</h2>
-<p>Quarto can’t reach into an installed R package to fetch styling — the files must sit next to the <code>.qmd</code> at render time. Two clean ways to get them there:</p>
-<ul>
-<li><strong>Extension</strong>: <code>quarto add</code> drops them into <code>_extensions/</code>; you opt in with <code>format:</code>.</li>
-<li><strong><code>_metadata.yml</code></strong>: a file with that exact name is auto-applied to every <code>.qmd</code> in its directory (no <code>format:</code> line); the R helper stages it for you.</li>
-</ul>
 </section>
 <section id="for-maintainers" class="level2">
 <h2 class="anchored" data-anchor-id="for-maintainers">For maintainers</h2>
 <ul>
-<li>Edit <code>fgcz.scss</code> / <code>fgcz_header_quarto.html</code> in <code>inst/quarto/</code>, then run <code>Rscript data-raw/sync_assets.R</code> to mirror them into <code>_extensions/</code> and <code>vignettes/_extensions/</code>.</li>
-<li>Keep <code>inst/quarto/_metadata.yml</code> and <code>_extensions/fgczquartotemplate/_extension.yml</code> in step (same format options, one flat / one nested under <code>contributes</code>).</li>
-<li>The live example report is the <code>vignettes/example-report.qmd</code> vignette; the documentation site (built with <code>altdoc</code> — <code>make site</code>) renders it through Quarto with its tabsets intact.</li>
+<li>The single source of the extension is <code>_extensions/fgczquartotemplate/</code> (what <code>quarto add</code> fetches). After editing it, run <code>make sync</code> to mirror it into <code>vignettes/_extensions/</code> so the demo vignette builds against the same files.</li>
+<li>The live example report is <code>vignettes/example-report.qmd</code>; the documentation site (built with <code>altdoc</code> — <code>make site</code>) renders it through Quarto with its tabsets intact.</li>
 </ul>
 </section>
 <section id="license" class="level2">
