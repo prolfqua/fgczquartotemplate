@@ -7,7 +7,7 @@ PKG_NAME := $(shell awk '/^Package:/ {print $$2; exit}' DESCRIPTION)
 help:
 	@echo "$(PKG_NAME) targets:"
 	@echo "  make document  - regenerate roxygen2 docs (man/, NAMESPACE)"
-	@echo "  make sync      - mirror inst/quarto assets into _extensions/ and vignettes/_extensions/, verify _metadata.yml <-> _extension.yml agree"
+	@echo "  make sync      - mirror _extensions/ into vignettes/_extensions/ for the demo vignette"
 	@echo "  make test      - run testthat tests"
 	@echo "  make check     - document + sync, then full R CMD check"
 	@echo "  make install   - document + sync, then install into the active R library"
@@ -18,11 +18,11 @@ help:
 document:
 	Rscript -e "devtools::document()"
 
-# The single source of truth is inst/quarto/. sync mirrors the shared assets into
-# the Quarto extension (_extensions/) and the demo vignette (vignettes/_extensions/)
-# and fails on any drift, so everything that ships or renders the extension depends on it.
+# The single source is _extensions/fgczquartotemplate/ (what `quarto add` fetches).
+# sync mirrors it into the demo vignette's vignettes/_extensions/ so both build
+# against byte-identical files; CI fails if the mirror is out of date.
 sync:
-	Rscript data-raw/sync_assets.R
+	Rscript -e 'src <- "_extensions/fgczquartotemplate"; dst <- "vignettes/_extensions/fgczquartotemplate"; dir.create(dst, recursive = TRUE, showWarnings = FALSE); ok <- file.copy(list.files(src, full.names = TRUE), dst, overwrite = TRUE); if (!all(ok)) stop("sync failed")'
 
 test: document
 	Rscript -e "devtools::test()"

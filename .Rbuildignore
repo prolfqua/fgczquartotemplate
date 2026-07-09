@@ -1,7 +1,6 @@
 ^LICENSE\.md$
 ^\.github$
 ^_extensions$
-^data-raw$
 ^skills$
 ^docs$
 ^Makefile$

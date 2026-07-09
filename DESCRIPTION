@@ -6,10 +6,11 @@ Authors@R: c(
     person("Jonas", "Grossmann", role = "aut"),
     person("Falko", "Noé", role = "aut"),
     person("Witold", "Wolski", , "witold@ethz.ch", role = c("aut", "cre")))
-Description: Shared Quarto report assets for FGCZ analysis packages
-    (ezRun, prolfqua): a common format YAML, SCSS theme, HTML header, and
-    starter report templates, plus helpers to stage them next to a .qmd
-    and render.
+Description: A shared Quarto format extension giving FGCZ analysis packages
+    (ezRun, prolfqua, prolfquapp) one look and feel: an SCSS theme, an HTML
+    header, tabset and figure styling, and an opt-in figure-finder toolbar.
+    Add it with 'quarto add prolfqua/fgczquartotemplate' and select it with
+    'format: fgczquartotemplate-html'.
 License: GPL (>= 3)
 URL: https://github.com/prolfqua/fgczquartotemplate,
     https://prolfqua.github.io/fgczquartotemplate/
@@ -17,16 +18,12 @@ BugReports: https://github.com/prolfqua/fgczquartotemplate/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports: 
-    quarto
 Suggests:
     DT,
     ggplot2,
     knitr,
     plotly,
-    rmarkdown,
-    testthat (>= 3.0.0),
-    yaml
+    quarto,
+    rmarkdown
 VignetteBuilder: knitr, quarto
-Config/testthat/edition: 3
 Config/Needs/website: DT, ggplot2, plotly
