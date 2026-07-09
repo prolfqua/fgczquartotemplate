@@ -1,5 +1,9 @@
 # fgczquartotemplate 0.1.0
 
+* The `fgcz-quarto-reports` skill's caption guidance now includes a concrete
+  before/after example: a negative (decorative, unsearchable) figure caption
+  contrasted with a positive one that names the statistics, panels, axes, and
+  diagnostic reading.
 * The opt-in toolbar's **🔍 Find** panel now opens tabs through Bootstrap's tab
   API so htmlwidgets such as DT tables redraw when revealed from inactive tabs.
 * The opt-in toolbar's **🔍 Find** panel now renders Plotly htmlwidgets as
