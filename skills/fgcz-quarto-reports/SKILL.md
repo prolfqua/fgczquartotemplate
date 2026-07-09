@@ -162,6 +162,30 @@ Prefer specific captions:
 #|   variance explained by PC1 and PC2.
 ```
 
+A concrete before / after, from a differential-expression report whose figure
+combines a fold-change histogram and a p-value histogram side by side.
+
+**Negative example (avoid)** — a decorative title: it indexes nothing a reader
+would search for and never says what the two panels are or how to read them:
+
+```yaml
+#| fig-cap: "Fold-change and p-value summaries."
+```
+
+**Positive example (prefer)** — names the statistics, both panels, their axes,
+and the diagnostic reading, so the caption stands on its own in the Find list:
+
+```yaml
+#| fig-cap: >-
+#|   Distributions of the differential-abundance statistics across all features.
+#|   Left: histogram of the estimated log2 fold-changes (x-axis log2
+#|   fold-change, y-axis feature count), expected to centre near zero because
+#|   most features are not differentially abundant. Right: histogram of the
+#|   significance score (p-value, or FDR/BFDR depending on the model; x-axis
+#|   0-1, y-axis feature count), expected to be roughly uniform with a peak near
+#|   zero when true effects are present.
+```
+
 Avoid vague captions such as `"PCA"`, `"UMAP"`, `"Density plot"`, or
 `"Scatter plot"`. They are bad search targets and do not let a reviewer verify
 that the figure is labelled correctly.

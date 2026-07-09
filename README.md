@@ -5,7 +5,7 @@ reusable across `ezRun`, `prolfqua`, `prolfquapp`, …. Reports can opt in to a
 right-edge toolbar — **🔍 Find** any figure or table, browse them as a
 **🖼️ Figures** thumbnail gallery, or **📥 Save** the plots as a ZIP.
 
-**👉 [See a live example report](https://prolfqua.github.io/fgczquartotemplate/example-report.html)** — the real layout, tabsets, figures, and the Find / Figures / Save toolbar.
+**👉 [See a live example report](https://prolfqua.github.io/fgczquartotemplate/vignettes/example-report.html)** — the real layout, tabsets, figures, and the Find / Figures / Save toolbar.
 
 There are **two ways** to use it. Pick one.
 
@@ -136,10 +136,13 @@ sit next to the `.qmd` at render time. Two clean ways to get them there:
 ## For maintainers
 
 - Edit `fgcz.scss` / `fgcz_header_quarto.html` in `inst/quarto/`, then run
-  `Rscript data-raw/sync_assets.R` to mirror them into `_extensions/`.
+  `Rscript data-raw/sync_assets.R` to mirror them into `_extensions/` and
+  `vignettes/_extensions/`.
 - Keep `inst/quarto/_metadata.yml` and `_extensions/fgczquartotemplate/_extension.yml`
   in step (same format options, one flat / one nested under `contributes`).
-- `Rscript data-raw/render_example.R` regenerates the live example report.
+- The live example report is the `vignettes/example-report.qmd` vignette; the
+  documentation site (built with `altdoc` — `make site`) renders it through Quarto
+  with its tabsets intact.
 
 ## License
 

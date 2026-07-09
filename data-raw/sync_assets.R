@@ -93,8 +93,27 @@ if (!identical(norm(meta_html), norm(ext_html))) {
   )
 }
 
+## (3) Mirror the finished extension into vignettes/ -------------------------
+## The packaged demo vignette (vignettes/_example-report.qmd) renders with
+## `format: fgczquartotemplate-html`, so it needs the extension next to it at
+## R CMD build time. Keep inst/quarto/ as the single source: this mirrors the
+## already-synced _extensions/ tree into vignettes/_extensions/ verbatim.
+vig_ext <- file.path("vignettes", "_extensions", "fgczquartotemplate")
+dir.create(vig_ext, recursive = TRUE, showWarnings = FALSE)
+ext_files <- list.files(dest_dir, full.names = TRUE)
+ok3 <- file.copy(ext_files, vig_ext, overwrite = TRUE)
+if (!all(ok3)) {
+  stop("Failed to mirror extension into ", vig_ext)
+}
+for (f in basename(ext_files)) {
+  a <- readBin(file.path(dest_dir, f), "raw", n = 1e7)
+  b <- readBin(file.path(vig_ext, f), "raw", n = 1e7)
+  if (!identical(a, b)) stop("Out of sync after mirror: vignettes copy of ", f)
+}
+
 message(
   "OK: synced ",
   paste(shared, collapse = ", "),
-  " and verified _metadata.yml <-> _extension.yml format options match."
+  ", mirrored the extension into vignettes/_extensions/, and verified ",
+  "_metadata.yml <-> _extension.yml format options match."
 )
