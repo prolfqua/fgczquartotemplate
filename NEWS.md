@@ -1,13 +1,5 @@
 # fgczquartotemplate 0.1.0
 
-* The package is now a pure Quarto **format extension plus a demo vignette**. The
-  R staging helpers (`fgcz_render`, `fgcz_copy_assets`, `fgcz_use_template`,
-  `fgcz_quarto_dir`), the `inst/quarto/` asset copy, and the `data-raw/` sync
-  script have been removed; the single source of the extension is
-  `_extensions/fgczquartotemplate/` (what `quarto add` fetches), mirrored into the
-  demo vignette via `make sync`. Downstream reports select the styling with
-  `format: fgczquartotemplate-html` (or by vendoring `_extensions/`) — no R call
-  is needed.
 * The documentation website is now built with
   [altdoc](https://altdoc.etiennebacher.com/) (Quarto Website backend) instead of
   pkgdown. pkgdown mangles Quarto `panel-tabset`s (its `tweak_tabsets` step crashes

@@ -33,12 +33,12 @@ jobs:
             any::plotly
           needs: website
 
-      - name: Verify vignette extension mirror is in sync
+      - name: Verify extension assets are in sync
         run: |
-          make sync
-          if [ -n "$(git status --porcelain -- vignettes/_extensions)" ]; then
-            echo "::error::vignettes/_extensions is out of date — run 'make sync' and commit"
-            git --no-pager diff -- vignettes/_extensions
+          Rscript data-raw/sync_assets.R
+          if [ -n "$(git status --porcelain -- _extensions vignettes/_extensions)" ]; then
+            echo "::error::extension out of sync with inst/quarto — run data-raw/sync_assets.R and commit"
+            git --no-pager diff -- _extensions vignettes/_extensions
             exit 1
           fi
 
