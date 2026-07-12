@@ -59,6 +59,31 @@ Either way you get the theme and the FGCZ header for free. The top-right
 routes); see the last section. Start from `inst/quarto/template.qmd` (via
 `fgcz_use_template()`), which demonstrates every layout pattern below in code.
 
+## Start with a compact Overview
+
+Start each report with an **Overview**. In a tabbed report, it is the first
+top-level tab; in a non-tabbed report, it is the first top-level section.
+Replace a pre-existing Introduction with it, or add it when no Introduction
+exists.
+
+The Overview must fit on a typical screen without scrolling. It contains:
+
+- a static **visual abstract** that explains this report type's purpose,
+  input, analysis path, and intended output;
+- a short explanation in plain language; and
+- a concise, human-readable input summary, such as assay/data type, sample
+  count, and analysis goal.
+
+The visual abstract is not a run-specific result figure. Author one reusable
+asset per report type and reference it explicitly from that report's `.qmd`.
+Keep assets with the report package, provide descriptive alt text, and ensure
+the runtime renderer stages them beside the `.qmd`. Do not make the template
+inspect a report, select figures, infer a report type, or inject report
+content. The template remains responsible for shared styling only.
+
+Keep identifiers, creator, timestamps, detailed input references, and software
+versions out of the Overview; they belong in the final Session Info tab.
+
 ## Tabs: keep them shallow
 
 Organize the report with `::: {.panel-tabset}`. Depth is the single most common
@@ -217,13 +242,19 @@ When you want it, use that switch — never hand-add buttons, a table-of-figures
 or a thumbnail gallery; the template's version is complete and tested.
 
 For B-Fabric / SUSHI reports, record report provenance **once**, in a final
-**Session Info** tab: a small two-column (field / value) table of Workunit,
-Order, Project, who generated the report, the generation timestamp, the
-quantification software, and the model where applicable, followed by
-`sessionInfo()`. Do **not** also repeat the same metadata in a report-information
-callout near the top — one Session Info tab is the single source of truth, and a
-duplicate header callout only pushes the actual report content down the page.
-Render the metadata as a table (e.g. `knitr::kable()`), not a bullet list.
+**Session Info** tab with exactly two subtabs:
+
+- **Report provenance** — a compact two-column field/value table of Workunit,
+  Order, Project, creator, creation timestamp, input-data reference,
+  quantification software, model where applicable, and report-package version.
+  Link to input data or B-Fabric records when available, but do not embed raw
+  data or a large input table in the HTML.
+- **R session info** — `sessionInfo()` only.
+
+Do **not** repeat this metadata in a top-of-page callout. The final Session Info
+tab is the single source of truth; a duplicate header callout pushes the actual
+report content down the page. Render report provenance as a table (for example,
+`knitr::kable()`), not a bullet list.
 
 To let the Download ZIP filename include the Order and Workunit, expose the same
 metadata to the toolbar with a hidden marker before the toolbar include runs:
@@ -251,11 +282,12 @@ tabs meaningful labels.
 
 - [ ] Two tab levels (a third only if its sub-tabs are identical across siblings)
 - [ ] Each tab fits on a screen (scroll only for the same figure repeated per sample)
+- [ ] First tab/section is a compact Overview with a report-type visual abstract, short explanation, and input summary
 - [ ] Figures small and gridded (`layout-ncol`), each with a `fig-cap`
 - [ ] Captions name the metric, axes/encoding, grouping, and key preprocessing
 - [ ] Static figures unless interactivity is truly needed for readability
 - [ ] Toolbar via `buttons = TRUE` (or `include-after-body`) if wanted — never hand-built
-- [ ] B-Fabric reports record provenance once — a Session Info tab with a field/value table + `sessionInfo()` and a `#fgcz-report-metadata` marker, not a duplicate top callout
+- [ ] B-Fabric reports record provenance once — a final Session Info tab with Report provenance and R session info subtabs, plus a `#fgcz-report-metadata` marker when the toolbar is enabled
 
 ## Pointers
 
