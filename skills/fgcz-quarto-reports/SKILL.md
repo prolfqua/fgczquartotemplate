@@ -2,14 +2,15 @@
 name: fgcz-quarto-reports
 description: >-
   Conventions for authoring FGCZ Quarto analysis reports with the
-  fgczquartotemplate package: tab-depth rules, one-screen layout, small gridded
-  figures with lightbox zoom, and when interactive (plotly/ggplotly) figures are
-  worth it. Use this skill whenever writing, structuring, or reviewing a `.qmd`
-  report that uses the FGCZ template (fgczquartotemplate, `_metadata.yml`, or
-  `format: fgczquartotemplate-html`), deciding how to lay out tabs and figures
-  in an FGCZ / SUSHI report, or turning an analysis (ezRun, prolfqua,
-  prolfquapp, DIA-NN, single-cell) into an FGCZ-styled HTML report — even if the
-  user never names the template explicitly.
+  fgczquartotemplate package: required Overview-first and final two-subtab
+  Session Info layout, tab-depth rules, one-screen layout, small gridded figures
+  with lightbox zoom, and when interactive (plotly/ggplotly) figures are worth
+  it. Use this skill whenever writing, structuring, or reviewing a `.qmd` report
+  that uses the FGCZ template (fgczquartotemplate, `_metadata.yml`, or `format:
+  fgczquartotemplate-html`), deciding how to lay out tabs and figures in an FGCZ
+  / SUSHI report, or turning an analysis (ezRun, prolfqua, prolfquapp, DIA-NN,
+  single-cell) into an FGCZ-styled HTML report — even if the user never names the
+  template explicitly.
 ---
 
 # Authoring FGCZ Quarto reports
@@ -53,18 +54,52 @@ no `quarto add`. Companion helpers: `fgcz_use_template()` starts a new report
 from the annotated starter, `fgcz_copy_assets()` just stages the files, and
 `fgcz_quarto_dir()` points at the installed assets.
 
-Either way you get the theme and the FGCZ header for free. The top-right
+Either way you get the theme and the FGCZ header for free. The right-edge
 **🔍 Find / 📥 Download** toolbar is opt-in — turn it on with
 `fgcz_render(buttons = TRUE)` (or an `include-after-body:` line for the CLI
 routes); see the last section. Start from `inst/quarto/template.qmd` (via
 `fgcz_use_template()`), which demonstrates every layout pattern below in code.
 
-## Start with a compact Overview
+## Required analysis-report layout
 
-Start each report with an **Overview**. In a tabbed report, it is the first
-top-level tab; in a non-tabbed report, it is the first top-level section.
-Replace a pre-existing Introduction with it, or add it when no Introduction
-exists.
+Every analysis-report vignette follows the same outer structure. In a tabbed
+report, **Overview** is the first top-level tab and **Session Info** is the last
+top-level tab; put every report-specific tab between them. In a non-tabbed
+report, use the same first and last top-level sections.
+
+```markdown
+# Overview
+
+...
+
+# <report-specific section>
+
+...
+
+# Session Info
+
+::: {.panel-tabset}
+
+## Report provenance
+
+...
+
+## R session info
+
+...
+
+:::
+```
+
+**Session Info has exactly those two level-2 subtabs, in that order.** Do not
+add a third subtab and do not repeat report metadata outside **Report
+provenance**. The template does not inject any of this report content: authors
+place the Overview and Session Info layout explicitly in each report's `.qmd`.
+
+### Start with a compact Overview
+
+Replace a pre-existing Introduction with **Overview**, or add the Overview when
+the report has no Introduction.
 
 The Overview must fit on a typical screen without scrolling. It contains:
 
@@ -232,7 +267,7 @@ If a static figure reads fine, keep it static.
 
 ## The Find / Download toolbar: opt-in, and don't hand-build it
 
-The template ships a top-right toolbar with two tools — **🔍 Find** (a
+The template ships a right-edge toolbar with two tools — **🔍 Find** (a
 searchable graphical table of contents for every figure and table; clicking one
 opens the tab it lives in and scrolls to it) and **📥 Download** (tick-box
 download of the static plots as a single ZIP). It is **off by default**; switch
@@ -241,14 +276,15 @@ it on with `fgcz_render(buttons = TRUE)` (or an `include-after-body:
 When you want it, use that switch — never hand-add buttons, a table-of-figures,
 or a thumbnail gallery; the template's version is complete and tested.
 
-For B-Fabric / SUSHI reports, record report provenance **once**, in a final
-**Session Info** tab with exactly two subtabs:
+Every analysis-report vignette records report provenance **once**, in the
+mandatory final **Session Info** tab and its exactly two subtabs:
 
 - **Report provenance** — a compact two-column field/value table of Workunit,
   Order, Project, creator, creation timestamp, input-data reference,
   quantification software, model where applicable, and report-package version.
-  Link to input data or B-Fabric records when available, but do not embed raw
-  data or a large input table in the HTML.
+  Include the fields available for the report, and link to input data or
+  B-Fabric records when available, but do not embed raw data or a large input
+  table in the HTML.
 - **R session info** — `sessionInfo()` only.
 
 Do **not** repeat this metadata in a top-of-page callout. The final Session Info
@@ -282,12 +318,12 @@ tabs meaningful labels.
 
 - [ ] Two tab levels (a third only if its sub-tabs are identical across siblings)
 - [ ] Each tab fits on a screen (scroll only for the same figure repeated per sample)
-- [ ] First tab/section is a compact Overview with a report-type visual abstract, short explanation, and input summary
+- [ ] First top-level tab/section is Overview, with a report-type visual abstract, short explanation, and input summary
 - [ ] Figures small and gridded (`layout-ncol`), each with a `fig-cap`
 - [ ] Captions name the metric, axes/encoding, grouping, and key preprocessing
 - [ ] Static figures unless interactivity is truly needed for readability
 - [ ] Toolbar via `buttons = TRUE` (or `include-after-body`) if wanted — never hand-built
-- [ ] B-Fabric reports record provenance once — a final Session Info tab with Report provenance and R session info subtabs, plus a `#fgcz-report-metadata` marker when the toolbar is enabled
+- [ ] Last top-level tab/section is Session Info with exactly two subtabs: Report provenance and R session info; add `#fgcz-report-metadata` when the toolbar is enabled
 
 ## Pointers
 
