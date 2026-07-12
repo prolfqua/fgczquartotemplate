@@ -1,8 +1,10 @@
 # fgczquartotemplate 0.2.0
 
-* The opt-in toolbar now docks the **🔍 Find** and **📥 Download** buttons on
-  the right side below the FGCZ banner, around one-quarter of the viewport height
-  from the top. Downloaded ZIP files now include a current timestamp, encode
+* The opt-in toolbar now docks the **🔍 Find** and **📥 Download** buttons as two
+  compact icon buttons glued to the right edge of the page and stacked (Find above
+  Download), around one-quarter of the viewport height from the top; each shows
+  only its icon until you hover or focus it, which slides the text label open.
+  Downloaded ZIP files now include a current timestamp, encode
   Order/Workunit identifiers when report metadata is available, and write current
   ZIP entry timestamps instead of the 1980 default.
 * The documentation website is now built with
@@ -13,7 +15,11 @@
 * The FGCZ layout demo now ships as a rendered vignette
   (`vignettes/example-report.qmd`), built with `format: fgczquartotemplate-html`
   from the vendored `vignettes/_extensions/`, and is shown on the documentation
-  site with its nested tabsets preserved.
+  site with its nested tabsets preserved. Its title is now a static string so the
+  documentation-site sidebar shows "FGCZ tabset layout example" instead of the
+  raw `` `r params$reportTitle` `` code (the Quarto website navigation harvests
+  the literal YAML title without executing inline code; a param-driven title
+  still works for standalone reports rendered from `inst/quarto/template.qmd`).
 * The `fgcz-quarto-reports` skill's caption guidance now includes a concrete
   before/after example: a negative (decorative, unsearchable) figure caption
   contrasted with a positive one that names the statistics, panels, axes, and

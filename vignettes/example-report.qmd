@@ -1,7 +1,5 @@
 ---
-params:
-  reportTitle: "FGCZ tabset layout example"
-title: "`r params$reportTitle`"
+title: "FGCZ tabset layout example"
 format:
   fgczquartotemplate-html:
     include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
