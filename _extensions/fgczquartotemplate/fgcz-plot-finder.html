@@ -3,9 +3,9 @@
      Wired into a report as an after-body include:
          include-after-body: fgcz-plot-finder.html
 
-     Two compact icon buttons glued to the right edge, stacked (Find above
-     Download), a quarter of the way down the page. They show only their icon
-     until hover/focus, which reveals the Find / Download label:
+     A horizontal row of compact icon buttons pinned at the top-right, just
+     below the FGCZ banner. They show only their icon until hover/focus, which
+     reveals the Find / Download label:
        🔍  FIND — searchable graphical list of every figure & table; clicking
                   an entry opens the tab(s) it lives in (Quarto hides
                   inactive-tab content) then scrolls + flashes it.
@@ -25,18 +25,19 @@
      view-source features from that file are intentionally not included.
      ════════════════════════════════════════════════════════════════════ -->
 <style>
-  /* ── Right-edge toolbar: flush to the right border, a quarter down the page.
-     Two icon buttons stacked and glued together (Find above Download). Each is
-     icon-only until hover/focus, when the .lbl label slides open. Buttons keep
-     their ids (#fgcz-pf-btn / #fgcz-dl-btn) so the JS wiring is unchanged. Move
-     the whole bar by editing `top` / `right`; resize via padding / .ic size. */
+  /* ── Top-right toolbar: a horizontal row pinned just below the banner (the
+     banner is up to 95px tall — see fgcz_header_quarto.html — so `top` clears
+     it). Icon buttons sit side by side, glued together; each is icon-only
+     until hover/focus, when the .lbl label slides open. Buttons keep their ids
+     (#fgcz-pf-btn / #fgcz-dl-btn) so the JS wiring is unchanged. Move the whole
+     bar by editing `top` / `right`; resize via padding / .ic size. */
   .fgcz-pf-toolbar {
-    position: fixed; right: 0; top: 25vh; transform: none;
-    z-index: 1080; display: flex; flex-direction: column; align-items: flex-end;
+    position: fixed; top: 105px; right: .75rem; transform: none;
+    z-index: 1080; display: flex; flex-direction: row; align-items: stretch;
     gap: 0;                                         /* buttons glued together */
   }
   .fgcz-pf-toolbar button {
-    display: flex; align-items: center; justify-content: flex-end;
+    display: flex; align-items: center; justify-content: center;
     padding: .5rem .55rem;                          /* compact, icon-sized */
     border: none; cursor: pointer; line-height: 1;
     background: var(--bs-primary, #0b5394); color: #fff;
@@ -44,11 +45,15 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
     white-space: nowrap;
   }
-  /* Round only the outer (left) corners of the stacked pair; the right side
-     stays square against the screen edge, with a hairline between the two. */
-  .fgcz-pf-toolbar button:first-child { border-top-left-radius: .55rem; }
-  .fgcz-pf-toolbar button:last-child  { border-bottom-left-radius: .55rem; }
-  .fgcz-pf-toolbar button + button { border-top: 1px solid rgba(255, 255, 255, .25); }
+  /* Round only the outer corners of the horizontal pair; a hairline divides
+     the two. With one button visible both outer corners fall on it. */
+  .fgcz-pf-toolbar button:first-child {
+    border-top-left-radius: .55rem; border-bottom-left-radius: .55rem;
+  }
+  .fgcz-pf-toolbar button:last-child {
+    border-top-right-radius: .55rem; border-bottom-right-radius: .55rem;
+  }
+  .fgcz-pf-toolbar button + button { border-left: 1px solid rgba(255, 255, 255, .25); }
   .fgcz-pf-toolbar button:hover { filter: brightness(1.12); }
   .fgcz-pf-toolbar .ic { font-size: 1.15rem; }      /* icon size */
   /* Label hidden (zero width) until hover/focus, then it slides open. */
@@ -238,6 +243,18 @@
 <script>
 (function () {
   "use strict";
+
+  // ─── which buttons the author enabled ──────────────────────────────
+  // fgcz_render() rewrites the placeholder token below in the staged copy of
+  // this file with the space-separated button names it was asked for (e.g.
+  // "search download"). If the token is still present — someone wired this
+  // file in by hand via include-after-body without going through
+  // fgcz_render() — fall back to showing every button.
+  var FGCZ_BUTTONS = "__FGCZ_BUTTONS__".split(/\s+/).filter(Boolean);
+  if (FGCZ_BUTTONS.length === 1 && FGCZ_BUTTONS[0] === "__FGCZ_" + "BUTTONS__") {
+    FGCZ_BUTTONS = ["search", "download"];
+  }
+  var FGCZ_BUTTON_IDS = { search: "fgcz-pf-btn", download: "fgcz-dl-btn" };
 
   // ─── tab / breadcrumb helpers ──────────────────────────────────────
 
@@ -1173,6 +1190,15 @@
     });
     dlGoEl.addEventListener('click', doDownload);
 
+    // Hide any button the author did not enable (FGCZ_BUTTONS). This runs
+    // before the content checks below, which may hide an enabled button too
+    // when it has nothing to act on.
+    Object.keys(FGCZ_BUTTON_IDS).forEach(function (name) {
+      if (FGCZ_BUTTONS.indexOf(name) === -1) {
+        document.getElementById(FGCZ_BUTTON_IDS[name]).style.display = 'none';
+      }
+    });
+
     // Show each button only when there's something for it to act on.
     var probe = buildIndex();
     var figs = probe.filter(function (it) { return it.type === 'fig'; });
@@ -1180,6 +1206,16 @@
     if (!browsable.length) document.getElementById('fgcz-pf-btn').style.display = 'none';
     if (!figs.some(function (it) { return !it.interactive; })) {
       document.getElementById('fgcz-dl-btn').style.display = 'none';
+    }
+
+    // Fully round a lone visible button (the :first/:last-child CSS only rounds
+    // one side each, and a hidden button is still a DOM child). With one button
+    // left, round all four corners so it doesn't look clipped on the right.
+    var visible = ['fgcz-pf-btn', 'fgcz-dl-btn'].filter(function (id) {
+      return document.getElementById(id).style.display !== 'none';
+    });
+    if (visible.length === 1) {
+      document.getElementById(visible[0]).style.borderRadius = '.55rem';
     }
   });
 })();

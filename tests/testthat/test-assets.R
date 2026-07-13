@@ -36,15 +36,43 @@ test_that("fgcz_copy_assets rejects non-qmd file paths", {
   expect_snapshot(error = TRUE, fgcz_copy_assets(txt))
 })
 
-test_that("fgcz_render rejects a non-scalar-logical buttons", {
+test_that("fgcz_render rejects invalid buttons", {
   # The buttons check runs before the quarto / file-existence checks, so this
   # needs neither quarto installed nor a real .qmd.
-  expect_error(fgcz_render("x.qmd", buttons = "yes"), "single TRUE or FALSE")
+  expect_error(fgcz_render("x.qmd", buttons = TRUE), "character vector")
+  expect_error(fgcz_render("x.qmd", buttons = FALSE), "character vector")
+  expect_error(fgcz_render("x.qmd", buttons = 1L), "character vector")
+  expect_error(fgcz_render("x.qmd", buttons = "bogus"), "Unknown button")
   expect_error(
-    fgcz_render("x.qmd", buttons = c(TRUE, FALSE)),
-    "single TRUE or FALSE"
+    fgcz_render("x.qmd", buttons = c("search", "nope")),
+    "Unknown button"
   )
-  expect_error(fgcz_render("x.qmd", buttons = NA), "single TRUE or FALSE")
+})
+
+test_that(".fgcz_validate_buttons normalises to display order", {
+  expect_identical(fgczquartotemplate:::.fgcz_validate_buttons(NULL), character(0))
+  expect_identical(
+    fgczquartotemplate:::.fgcz_validate_buttons(character(0)),
+    character(0)
+  )
+  expect_identical(
+    fgczquartotemplate:::.fgcz_validate_buttons("search"),
+    "search"
+  )
+  # de-duplicates and returns in left-to-right display order regardless of input
+  expect_identical(
+    fgczquartotemplate:::.fgcz_validate_buttons(c("download", "search", "search")),
+    c("search", "download")
+  )
+})
+
+test_that(".fgcz_set_toolbar_buttons patches the placeholder", {
+  tmp <- tempfile(fileext = ".html")
+  writeLines("var FGCZ_BUTTONS = \"__FGCZ_BUTTONS__\".split(/\\s+/);", tmp)
+  fgczquartotemplate:::.fgcz_set_toolbar_buttons(tmp, c("search", "download"))
+  patched <- paste(readLines(tmp, warn = FALSE), collapse = "\n")
+  expect_false(grepl("__FGCZ_BUTTONS__", patched, fixed = TRUE))
+  expect_true(grepl("\"search download\"", patched, fixed = TRUE))
 })
 
 test_that("plot finder downloads use report metadata and current timestamps", {

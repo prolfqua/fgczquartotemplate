@@ -13,7 +13,8 @@
 #'     `include-in-header`.}
 #'   \item{`fgcz-plot-finder.html`}{Top-right search + download toolbar.
 #'     Opt-in: staged next to every report but only injected (via
-#'     `include-after-body`) when asked for, e.g. `fgcz_render(buttons = TRUE)`.}
+#'     `include-after-body`) when asked for, e.g.
+#'     `fgcz_render(buttons = "search")`.}
 #'   \item{`template.qmd`}{A generic starter report demonstrating the tabset,
 #'     figure-with-callout, and nesting patterns.}
 #' }
@@ -25,7 +26,7 @@
 #' `fgcz_header_quarto.html` by bare filename, which Quarto resolves relative to
 #' the input `.qmd`, so they must travel together; see [fgcz_copy_assets()] and
 #' [fgcz_render()]. The toolbar (`fgcz-plot-finder.html`) is staged too but is
-#' opt-in -- enable it with `fgcz_render(buttons = TRUE)`.
+#' opt-in -- enable it with `fgcz_render(buttons = "search")`.
 #'
 #' @name fgczquartotemplate-assets
 NULL
@@ -161,14 +162,16 @@ fgcz_use_template <- function(dir, to = "template.qmd", overwrite = FALSE) {
 #' Quarto automatically, so the report stays fully portable.
 #'
 #' @param input Path to the `.qmd` to render.
-#' @param buttons Add the top-right search + download toolbar
-#'   (`fgcz-plot-finder.html`) to the report. Defaults to `FALSE`; pass `TRUE`
-#'   to opt in. The toolbar ships with the package and is always staged next to
-#'   `input`, but is only wired in (via `include-after-body`) when you ask for
-#'   it here.
+#' @param buttons Which toolbar buttons (`fgcz-plot-finder.html`) to add to the
+#'   report, as a character vector of button names. Valid names are `"search"`
+#'   (the Find figures/tables panel) and `"download"` (the bulk-download panel).
+#'   Defaults to `NULL` (no toolbar); `character(0)` also means no toolbar. Pass
+#'   `"search"` for the Find button only, or `c("search", "download")` for both.
+#'   The toolbar ships with the package and is always staged next to `input`,
+#'   but is only wired in (via `include-after-body`) when you name buttons here.
 #' @param ... Passed on to [quarto::quarto_render()] (e.g. `execute_params`,
 #'   `output_file`, `quarto_args`). A `metadata` list passed here is honored;
-#'   `buttons = TRUE` merges `include-after-body` into it.
+#'   naming buttons merges `include-after-body` into it.
 #'
 #' @return The value of [quarto::quarto_render()], invisibly.
 #' @export
@@ -176,29 +179,69 @@ fgcz_use_template <- function(dir, to = "template.qmd", overwrite = FALSE) {
 #' @examples
 #' \dontrun{
 #' fgcz_render("CountQC.qmd", execute_params = list(reportTitle = "CountQC"))
-#' fgcz_render("CountQC.qmd", buttons = TRUE) # with the Find/Download toolbar
+#' fgcz_render("CountQC.qmd", buttons = "search") # Find button only
+#' fgcz_render("CountQC.qmd", buttons = c("search", "download")) # both
 #' }
-fgcz_render <- function(input, buttons = FALSE, ...) {
-  if (!is.logical(buttons) || length(buttons) != 1L || is.na(buttons)) {
-    stop("`buttons` must be a single TRUE or FALSE.")
-  }
+fgcz_render <- function(input, buttons = NULL, ...) {
+  buttons <- .fgcz_validate_buttons(buttons)
   if (!requireNamespace("quarto", quietly = TRUE)) {
     stop("Package 'quarto' is required to render reports.")
   }
   stopifnot(file.exists(input))
   fgcz_copy_assets(input)
   dots <- list(...)
-  if (buttons) {
-    # The toolbar is opt-in: fgcz_copy_assets() staged it next to `input`; wire
+  if (length(buttons)) {
+    # The toolbar is opt-in: fgcz_copy_assets() staged it next to `input`.
+    # Patch the staged copy so its JS shows only the named buttons, then wire
     # it in for this render via include-after-body, merged into any
     # caller-supplied `metadata` so we do not clobber it.
     toolbar <- normalizePath(
       file.path(.fgcz_asset_target_dir(input), "fgcz-plot-finder.html"),
       mustWork = TRUE
     )
+    .fgcz_set_toolbar_buttons(toolbar, buttons)
     md <- if (is.null(dots$metadata)) list() else dots$metadata
     md[["include-after-body"]] <- toolbar
     dots$metadata <- md
   }
   invisible(do.call(quarto::quarto_render, c(list(input = input), dots)))
+}
+
+# Valid toolbar button names, in display (left-to-right) order.
+.fgcz_valid_buttons <- c("search", "download")
+
+# Validate/normalise the `buttons` argument: NULL or a character vector whose
+# elements are all valid button names. Returns the de-duplicated selection in
+# display order (character(0) when nothing is enabled).
+.fgcz_validate_buttons <- function(buttons) {
+  if (is.null(buttons)) {
+    return(character(0))
+  }
+  if (!is.character(buttons)) {
+    stop(
+      "`buttons` must be a character vector of button names ",
+      "(e.g. c(\"search\", \"download\")), or NULL for no toolbar.",
+      call. = FALSE
+    )
+  }
+  buttons <- unique(buttons)
+  bad <- setdiff(buttons, .fgcz_valid_buttons)
+  if (length(bad)) {
+    stop(
+      "Unknown button name(s): ", paste(bad, collapse = ", "),
+      ". Valid names are: ", paste(.fgcz_valid_buttons, collapse = ", "), ".",
+      call. = FALSE
+    )
+  }
+  .fgcz_valid_buttons[.fgcz_valid_buttons %in% buttons]
+}
+
+# Rewrite the __FGCZ_BUTTONS__ placeholder in a staged fgcz-plot-finder.html
+# with the space-separated button names, so its JS shows only those buttons.
+.fgcz_set_toolbar_buttons <- function(path, buttons) {
+  html <- readChar(path, file.info(path)$size, useBytes = TRUE)
+  Encoding(html) <- "UTF-8"
+  html <- sub("__FGCZ_BUTTONS__", paste(buttons, collapse = " "), html, fixed = TRUE)
+  writeLines(html, path, sep = "", useBytes = TRUE)
+  invisible(path)
 }

@@ -4,20 +4,22 @@
 \alias{fgcz_render}
 \title{Render an FGCZ Quarto report}
 \usage{
-fgcz_render(input, buttons = FALSE, ...)
+fgcz_render(input, buttons = NULL, ...)
 }
 \arguments{
 \item{input}{Path to the \code{.qmd} to render.}
 
-\item{buttons}{Add the top-right search + download toolbar
-(\code{fgcz-plot-finder.html}) to the report. Defaults to \code{FALSE}; pass \code{TRUE}
-to opt in. The toolbar ships with the package and is always staged next to
-\code{input}, but is only wired in (via \code{include-after-body}) when you ask for
-it here.}
+\item{buttons}{Which toolbar buttons (\code{fgcz-plot-finder.html}) to add to the
+report, as a character vector of button names. Valid names are \code{"search"}
+(the Find figures/tables panel) and \code{"download"} (the bulk-download panel).
+Defaults to \code{NULL} (no toolbar); \code{character(0)} also means no toolbar. Pass
+\code{"search"} for the Find button only, or \code{c("search", "download")} for both.
+The toolbar ships with the package and is always staged next to \code{input},
+but is only wired in (via \code{include-after-body}) when you name buttons here.}
 
 \item{...}{Passed on to \code{\link[quarto:quarto_render]{quarto::quarto_render()}} (e.g. \code{execute_params},
 \code{output_file}, \code{quarto_args}). A \code{metadata} list passed here is honored;
-\code{buttons = TRUE} merges \code{include-after-body} into it.}
+naming buttons merges \code{include-after-body} into it.}
 }
 \value{
 The value of \code{\link[quarto:quarto_render]{quarto::quarto_render()}}, invisibly.
@@ -31,6 +33,7 @@ Quarto automatically, so the report stays fully portable.
 \examples{
 \dontrun{
 fgcz_render("CountQC.qmd", execute_params = list(reportTitle = "CountQC"))
-fgcz_render("CountQC.qmd", buttons = TRUE) # with the Find/Download toolbar
+fgcz_render("CountQC.qmd", buttons = "search") # Find button only
+fgcz_render("CountQC.qmd", buttons = c("search", "download")) # both
 }
 }
