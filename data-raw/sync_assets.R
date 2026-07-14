@@ -17,7 +17,12 @@ dest_dir <- file.path("_extensions", "fgczquartotemplate")
 stopifnot(dir.exists(dest_dir), dir.exists(file.path("inst", "quarto")))
 
 ## (1) Sync the byte-identical shared files ----------------------------------
-shared <- c("fgcz.scss", "fgcz_header_quarto.html", "fgcz-plot-finder.html")
+shared <- c(
+  "fgcz.scss",
+  "fgcz_header_quarto.html",
+  "fgcz-plot-finder.html",
+  "fgcz-buttons.lua"
+)
 src <- file.path("inst", "quarto", shared)
 stopifnot(all(file.exists(src)))
 ok <- file.copy(src, dest_dir, overwrite = TRUE)
@@ -44,6 +49,12 @@ for (k in c("execute", "knitr", "crossref", "lightbox")) {
   meta_html[[k]] <- meta[[k]]
 }
 ext_html <- ext$contributes$formats$html
+
+# `filters` is an extension-only contribution: fgcz-buttons.lua ships with the
+# Quarto format so `fgcz-buttons:` works on manual installs. The R fgcz_render()
+# path selects buttons directly, so _metadata.yml carries no filter. Drop it
+# before the deep comparison of shared render options.
+ext_html[["filters"]] <- NULL
 
 # Order-independent deep comparison of the two option trees.
 norm <- function(x) {

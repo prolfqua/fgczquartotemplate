@@ -26,9 +26,14 @@ contributes:
         sidebar-width: 250px
         margin-width: 100px
       include-in-header: fgcz_header_quarto.html
+      # Reads the report's optional `fgcz-buttons:` header (e.g. `fgcz-buttons:
+      # search`) and injects it for the toolbar. No-op when the key is absent.
+      filters:
+        - fgcz-buttons.lua
       # Toolbar (fgcz-plot-finder.html) is opt-in; see inst/quarto/_metadata.yml.
       # Enable per report with:
       #   include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+      #   fgcz-buttons: search      # optional; omit to show all buttons
       fig-dpi: 300
       fig-align: left
       execute:

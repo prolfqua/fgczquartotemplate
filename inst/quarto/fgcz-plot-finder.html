@@ -238,14 +238,19 @@
   "use strict";
 
   // ─── which buttons the author enabled ──────────────────────────────
-  // fgcz_render() rewrites the placeholder token below in the staged copy of
-  // this file with the space-separated button names it was asked for (e.g.
-  // "search download"). If the token is still present — someone wired this
-  // file in by hand via include-after-body without going through
-  // fgcz_render() — fall back to showing every button.
-  var FGCZ_BUTTONS = "__FGCZ_BUTTONS__".split(/\s+/).filter(Boolean);
-  if (FGCZ_BUTTONS.length === 1 && FGCZ_BUTTONS[0] === "__FGCZ_" + "BUTTONS__") {
-    FGCZ_BUTTONS = ["search", "download"];
+  // Precedence: (1) the report's `fgcz-buttons:` header, injected as a global by
+  // fgcz-buttons.lua; (2) the placeholder token below, rewritten by fgcz_render()
+  // in its staged copy with the requested names (e.g. "search download"); (3) if
+  // neither applied — wired in by hand via include-after-body without going
+  // through either — fall back to showing every button.
+  var FGCZ_BUTTONS;
+  if (window.FGCZ_BUTTONS && window.FGCZ_BUTTONS.length) {
+    FGCZ_BUTTONS = window.FGCZ_BUTTONS;
+  } else {
+    FGCZ_BUTTONS = "__FGCZ_BUTTONS__".split(/\s+/).filter(Boolean);
+    if (FGCZ_BUTTONS.length === 1 && FGCZ_BUTTONS[0] === "__FGCZ_" + "BUTTONS__") {
+      FGCZ_BUTTONS = ["search", "download"];
+    }
   }
   var FGCZ_BUTTON_IDS = { search: "fgcz-pf-btn", download: "fgcz-dl-btn" };
 

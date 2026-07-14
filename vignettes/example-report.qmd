@@ -3,6 +3,8 @@ title: "FGCZ tabset layout example"
 format:
   fgczquartotemplate-html:
     include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+# Pick which toolbar buttons show; omit to show all. e.g. `fgcz-buttons: search`
+# fgcz-buttons: [search, download]
 vignette: >
   %\VignetteIndexEntry{Example FGCZ tabset report}
   %\VignetteEngine{quarto::format}

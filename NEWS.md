@@ -1,5 +1,11 @@
 # fgczquartotemplate 0.2.0
 
+* Reports can now pick which toolbar buttons appear straight from the YAML header
+  with a top-level `fgcz-buttons:` key (e.g. `fgcz-buttons: search` for the Find
+  button only, or `fgcz-buttons: [search, download]` for both). A new
+  `fgcz-buttons.lua` filter shipped with the Quarto extension reads the key and
+  hands it to the toolbar, so it works on plain `quarto add` installs without
+  going through `fgcz_render()`. Omit the key to keep showing all buttons.
 * The opt-in toolbar now docks the **🔍 Find** and **📥 Download** buttons as two
   compact icon buttons glued to the right edge of the page and stacked (Find above
   Download), around one-quarter of the viewport height from the top; each shows
