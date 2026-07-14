@@ -25,14 +25,18 @@
      view-source features from that file are intentionally not included.
      ════════════════════════════════════════════════════════════════════ -->
 <style>
-  /* ── Top-right toolbar: a horizontal row pinned just below the banner (the
-     banner is up to 95px tall — see fgcz_header_quarto.html — so `top` clears
-     it). Icon buttons sit side by side, glued together; each is icon-only
-     until hover/focus, when the .lbl label slides open. Buttons keep their ids
+  /* ── Top-right toolbar: a horizontal row glued just below the banner. At rest
+     it sits GAP_PX (see the script) beneath the banner (up to 95px tall — see
+     fgcz_header_quarto.html); as the banner scrolls up the bar tracks it down,
+     and once the banner is out of view the bar stops GAP_PX from the top of the
+     window — the same gap it kept below the header. The JS sets `top` on
+     scroll; the value here is the pre-JS at-rest fallback (GAP_PX + ~95px).
+     Icon-only buttons sit side by side, glued together; each names itself via
+     its native `title` tooltip on hover. Buttons keep their ids
      (#fgcz-pf-btn / #fgcz-dl-btn) so the JS wiring is unchanged. Move the whole
-     bar by editing `top` / `right`; resize via padding / .ic size. */
+     bar by editing GAP_PX / `right`; resize via padding / .ic size. */
   .fgcz-pf-toolbar {
-    position: fixed; top: 105px; right: .75rem; transform: none;
+    position: fixed; top: 101px; right: .75rem; transform: none;
     z-index: 1080; display: flex; flex-direction: row; align-items: stretch;
     gap: 0;                                         /* buttons glued together */
   }
@@ -41,7 +45,6 @@
     padding: .5rem .55rem;                          /* compact, icon-sized */
     border: none; cursor: pointer; line-height: 1;
     background: var(--bs-primary, #0b5394); color: #fff;
-    font-size: .72rem; font-weight: 600;            /* label text (on hover) */
     box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
     white-space: nowrap;
   }
@@ -56,16 +59,6 @@
   .fgcz-pf-toolbar button + button { border-left: 1px solid rgba(255, 255, 255, .25); }
   .fgcz-pf-toolbar button:hover { filter: brightness(1.12); }
   .fgcz-pf-toolbar .ic { font-size: 1.15rem; }      /* icon size */
-  /* Label hidden (zero width) until hover/focus, then it slides open. */
-  .fgcz-pf-toolbar .lbl {
-    max-width: 0; margin-left: 0; overflow: hidden;
-    transition: max-width .18s ease, margin-left .18s ease, opacity .18s ease;
-    opacity: 0;
-  }
-  .fgcz-pf-toolbar button:hover .lbl,
-  .fgcz-pf-toolbar button:focus-visible .lbl {
-    max-width: 7rem; margin-left: .3rem; opacity: 1;
-  }
 
   /* ── Slide-out panels (off-screen until .open). Both share styling. ── */
   .fgcz-pf-panel {
@@ -207,8 +200,8 @@
 
 <!-- Top-right toolbar -->
 <div class="fgcz-pf-toolbar">
-  <button id="fgcz-pf-btn" title="Find figures and tables" aria-label="Find figures and tables"><span class="ic">🔍</span><span class="lbl">Find</span></button>
-  <button id="fgcz-dl-btn" title="Download plots" aria-label="Download plots"><span class="ic">📥</span><span class="lbl">Download</span></button>
+  <button id="fgcz-pf-btn" title="Find figures and tables" aria-label="Find figures and tables"><span class="ic">🔍</span></button>
+  <button id="fgcz-dl-btn" title="Download plots" aria-label="Download plots"><span class="ic">📥</span></button>
 </div>
 
 <!-- DOWNLOAD panel -->
@@ -1171,6 +1164,30 @@
     dlGoEl    = document.getElementById('fgcz-dl-go');
     tocGridEl = document.getElementById('fgcz-toc-grid');
     tocSearchEl = document.getElementById('fgcz-toc-search');
+
+    // ── Glue the toolbar to the header. At rest it sits GAP_PX below the
+    // banner; as the banner scrolls up the bar tracks it down, and once the
+    // banner is out of view the bar stops GAP_PX from the top of the window —
+    // the same gap it kept below the header. `top` = GAP_PX + how far the
+    // banner's bottom edge still is below the viewport top (0 once it's gone).
+    // rAF-throttled so scrolling stays smooth. Falls back to the CSS `top`
+    // when there's no banner (toolbar wired in without the FGCZ header).
+    var GAP_PX = 6;
+    var toolbar = document.querySelector('.fgcz-pf-toolbar');
+    var banner = document.querySelector('.fgcz-banner');
+    if (toolbar && banner) {
+      var ticking = false;
+      var positionToolbar = function () {
+        ticking = false;
+        toolbar.style.top = (GAP_PX + Math.max(0, banner.getBoundingClientRect().bottom)) + 'px';
+      };
+      var onScroll = function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(positionToolbar); }
+      };
+      positionToolbar();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+    }
 
     document.getElementById('fgcz-pf-btn').addEventListener('click', openToc);
     document.getElementById('fgcz-dl-btn').addEventListener('click', openDownload);
