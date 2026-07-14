@@ -30,13 +30,13 @@
      fgcz_header_quarto.html); as the banner scrolls up the bar tracks it down,
      and once the banner is out of view the bar stops GAP_PX from the top of the
      window — the same gap it kept below the header. The JS sets `top` on
-     scroll; the value here is the pre-JS at-rest fallback (GAP_PX + ~95px).
+     scroll; the value here is the pre-JS at-rest fallback (GAP_PX 12 + ~95px).
      Icon-only buttons sit side by side, glued together; each names itself via
      its native `title` tooltip on hover. Buttons keep their ids
      (#fgcz-pf-btn / #fgcz-dl-btn) so the JS wiring is unchanged. Move the whole
      bar by editing GAP_PX / `right`; resize via padding / .ic size. */
   .fgcz-pf-toolbar {
-    position: fixed; top: 101px; right: .75rem; transform: none;
+    position: fixed; top: 107px; right: .75rem; transform: none;
     z-index: 1080; display: flex; flex-direction: row; align-items: stretch;
     gap: 0;                                         /* buttons glued together */
   }
@@ -1172,7 +1172,7 @@
     // banner's bottom edge still is below the viewport top (0 once it's gone).
     // rAF-throttled so scrolling stays smooth. Falls back to the CSS `top`
     // when there's no banner (toolbar wired in without the FGCZ header).
-    var GAP_PX = 6;
+    var GAP_PX = 12;   // matches `right: .75rem` (12px) so the stuck bar is equidistant from top & right
     var toolbar = document.querySelector('.fgcz-pf-toolbar');
     var banner = document.querySelector('.fgcz-banner');
     if (toolbar && banner) {
