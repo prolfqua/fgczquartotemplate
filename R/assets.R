@@ -15,7 +15,8 @@
 #'     Opt-in: staged next to every report but only injected (via
 #'     `include-after-body`) when asked for, e.g. `fgcz_render(buttons = TRUE)`.}
 #'   \item{`template.qmd`}{A generic starter report demonstrating the tabset,
-#'     figure-with-callout, and nesting patterns.}
+#'     figure-with-callout, and nesting patterns. It is copied with
+#'     `fgcz-report-overview.svg`, the starter's visual abstract.}
 #' }
 #'
 #' Because `_metadata.yml` is applied by directory, a `.qmd` rendered with a
@@ -122,8 +123,9 @@ fgcz_copy_assets <- function(path, overwrite = TRUE) {
 
 #' Copy the starter template into a directory
 #'
-#' Copies `template.qmd` (a generic FGCZ report skeleton) into `dir`, together
-#' with the styling assets it needs. Use this to bootstrap a new report.
+#' Copies `template.qmd` (a generic FGCZ report skeleton) and its
+#' `fgcz-report-overview.svg` visual abstract into `dir`, together with the
+#' styling assets they need. Use this to bootstrap a new report.
 #'
 #' @param dir Destination directory. Created if it does not exist.
 #' @param to Filename for the copied template within `dir`.
@@ -148,6 +150,18 @@ fgcz_use_template <- function(dir, to = "template.qmd", overwrite = FALSE) {
     !file.copy(fgcz_quarto_dir("template.qmd"), dest, overwrite = overwrite)
   ) {
     stop("Failed to copy template to '", dest, "'.")
+  }
+  overview <- "fgcz-report-overview.svg"
+  overview_dest <- file.path(dir, overview)
+  if (
+    (overwrite || !file.exists(overview_dest)) &&
+      !file.copy(
+        fgcz_quarto_dir(overview),
+        overview_dest,
+        overwrite = overwrite
+      )
+  ) {
+    stop("Failed to copy template visual abstract to '", dir, "'.")
   }
   fgcz_copy_assets(dir)
   invisible(dest)

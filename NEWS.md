@@ -1,5 +1,12 @@
 # fgczquartotemplate 0.2.0
 
+* The documentation site now publishes the `fgcz-quarto-reports` authoring
+  skill as a readable guide and links it from the package usage vignette.
+* The starter and example report now demonstrate the required compact Overview
+  with a visual abstract, introduction, and high-level input summary, followed
+  by a final Session Info tab containing separate Report provenance and R
+  session info subtabs. `fgcz_use_template()` also copies the visual abstract
+  beside the new report.
 * The opt-in toolbar now docks the **🔍 Find** and **📥 Download** buttons as two
   compact icon buttons glued to the right edge of the page and stacked (Find above
   Download), around one-quarter of the viewport height from the top; each shows

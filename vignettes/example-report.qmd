@@ -14,11 +14,66 @@ vignette: >
 library(ggplot2)
 library(DT)
 library(plotly)
+
+generated_at <- format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")
+report_package_version <- as.character(
+  utils::packageVersion("fgczquartotemplate")
+)
 ```
 
 ::: {.panel-tabset}
 
-# First
+# Overview
+
+This worked example shows how an FGCZ analysis report turns compact input data
+into searchable tables and figures, then packages the results in a navigable,
+self-contained HTML report. Replace the illustrative content with the purpose,
+inputs, and analysis goal of the report you are authoring.
+
+::::: {.fig-row}
+
+:::: {.fig-main}
+
+```{r overview-visual-abstract}
+#| fig-cap: >-
+#|   Visual abstract of the FGCZ reporting workflow. Compact assay inputs feed
+#|   an analysis that produces quality summaries, tables, and figures, which
+#|   are organized into a searchable report with explicit provenance.
+#| fig-alt: >-
+#|   Three connected cards labelled Input, Analyse, and Report. The Input card
+#|   lists assay data and sample annotations, Analyse lists quality summaries,
+#|   tables, and figures, and Report lists overview, results, and provenance.
+#| out-width: "100%"
+knitr::include_graphics("fgcz-report-overview.svg")
+```
+
+::::
+
+:::: {.fig-side}
+
+## At a glance
+
+```{r overview-summary}
+knitr::kable(
+  data.frame(
+    Summary = c("Input", "Scale", "Outputs", "Goal"),
+    Value = c(
+      "Built-in iris and mtcars data",
+      paste(nrow(iris), "flowers and", nrow(mtcars), "cars"),
+      "Tables, static and interactive figures, and nested tabs",
+      "A compact, searchable, self-contained analysis report"
+    ),
+    check.names = FALSE
+  ),
+  caption = "High-level summary of the example report."
+)
+```
+
+::::
+
+:::::
+
+# Section callout
 
 <!-- PATTERN 1 — section-level callout: a full-width note that frames or
      caveats the WHOLE sub-tab (methods summary, data source, scope). Just a
@@ -54,7 +109,7 @@ DT::datatable(
 )
 ```
 
-# Second
+# Annotated figure
 
 <!-- PATTERN 2 — OPTIONAL plot + side callout (flush, same height).
      RULE: every figure carries a native #| fig-cap caption (below the plot) —
@@ -350,8 +405,59 @@ ggplot(iris, aes(Petal.Length, Petal.Width, colour = Species)) +
 
 # Session Info
 
-```{r session-info}
+::: {.panel-tabset}
+
+## Report provenance
+
+```{r report-metadata-marker}
+#| results: asis
+cat(
+  '<div id="fgcz-report-metadata" hidden',
+  ' data-project-id="example-project"',
+  ' data-order-id="example-order"',
+  ' data-workunit-id="example-workunit"',
+  ' data-generated-by="fgczquartotemplate"',
+  sprintf(' data-generated-at="%s"></div>', generated_at)
+)
+```
+
+```{r report-provenance}
+knitr::kable(
+  data.frame(
+    Field = c(
+      "Project",
+      "Order",
+      "Workunit",
+      "Created by",
+      "Creation timestamp",
+      "Input data reference",
+      "Analysis software",
+      "Model",
+      "Report package"
+    ),
+    Value = c(
+      "Example project",
+      "Example order",
+      "Example workunit",
+      "fgczquartotemplate example vignette",
+      generated_at,
+      "datasets::iris and datasets::mtcars (bundled with R)",
+      R.version.string,
+      "Not applicable (layout demonstration)",
+      paste("fgczquartotemplate", report_package_version)
+    ),
+    check.names = FALSE
+  ),
+  caption = "Provenance for this rendered example report."
+)
+```
+
+## R session info
+
+```{r r-session-info}
 sessionInfo()
 ```
+
+:::
 
 :::

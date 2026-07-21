@@ -111,9 +111,62 @@ for (f in basename(ext_files)) {
   if (!identical(a, b)) stop("Out of sync after mirror: vignettes copy of ", f)
 }
 
+## The vignette and copied starter use the same visual abstract. Keep its
+## packaged copy in inst/quarto/ as the source of truth too.
+overview <- "fgcz-report-overview.svg"
+overview_src <- file.path("inst", "quarto", overview)
+overview_vignette <- file.path("vignettes", overview)
+if (!file.copy(overview_src, overview_vignette, overwrite = TRUE)) {
+  stop("Failed to mirror ", overview, " into vignettes/.")
+}
+if (
+  !identical(
+    readBin(overview_src, "raw", n = 1e7),
+    readBin(overview_vignette, "raw", n = 1e7)
+  )
+) {
+  stop("Out of sync after mirror: vignettes copy of ", overview)
+}
+
+## The required report shell is part of the documented contract. Validate both
+## author-facing examples so later edits cannot silently drift from the skill.
+validate_report_layout <- function(path) {
+  qmd <- trimws(readLines(path, warn = FALSE))
+  top_level <- grep("^# ", qmd, value = TRUE)
+  session_info <- match("# Session Info", qmd)
+  if (
+    length(top_level) < 2 ||
+      top_level[[1]] != "# Overview" ||
+      tail(top_level, 1) != "# Session Info" ||
+      is.na(session_info)
+  ) {
+    stop(path, " must start with Overview and end with Session Info.")
+  }
+  session_subtabs <- grep(
+    "^## ",
+    qmd[session_info:length(qmd)],
+    value = TRUE
+  )
+  expected <- c("## Report provenance", "## R session info")
+  if (!identical(session_subtabs, expected)) {
+    stop(path, " must contain exactly the required Session Info subtabs.")
+  }
+  if (!any(grepl(overview, qmd, fixed = TRUE))) {
+    stop(path, " must reference ", overview, ".")
+  }
+}
+
+invisible(lapply(
+  c(
+    file.path("inst", "quarto", "template.qmd"),
+    file.path("vignettes", "example-report.qmd")
+  ),
+  validate_report_layout
+))
+
 message(
   "OK: synced ",
   paste(shared, collapse = ", "),
-  ", mirrored the extension into vignettes/_extensions/, and verified ",
+  ", mirrored the extension and visual abstract into vignettes/, and verified ",
   "_metadata.yml <-> _extension.yml format options match."
 )

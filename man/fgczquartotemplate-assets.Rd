@@ -20,7 +20,8 @@ because of its reserved name -- reports need no reference to it.}
 Opt-in: staged next to every report but only injected (via
 \code{include-after-body}) when asked for, e.g. \code{fgcz_render(buttons = TRUE)}.}
 \item{\code{template.qmd}}{A generic starter report demonstrating the tabset,
-figure-with-callout, and nesting patterns.}
+figure-with-callout, and nesting patterns. It is copied with
+\code{fgcz-report-overview.svg}, the starter's visual abstract.}
 }
 
 Because \verb{_metadata.yml} is applied by directory, a \code{.qmd} rendered with a

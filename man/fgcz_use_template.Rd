@@ -17,8 +17,9 @@ fgcz_use_template(dir, to = "template.qmd", overwrite = FALSE)
 Path to the copied template, invisibly.
 }
 \description{
-Copies \code{template.qmd} (a generic FGCZ report skeleton) into \code{dir}, together
-with the styling assets it needs. Use this to bootstrap a new report.
+Copies \code{template.qmd} (a generic FGCZ report skeleton) and its
+\code{fgcz-report-overview.svg} visual abstract into \code{dir}, together with the
+styling assets they need. Use this to bootstrap a new report.
 }
 \examples{
 \dontrun{

@@ -31,6 +31,13 @@ Quarto, so the FGCZ layout and its panel-tabsets appear exactly as they do
 locally (pkgdown, by contrast, mangles Quarto tabsets). This article explains how
 to *use* the templates.
 
+**Author reports consistently:** read the
+[FGCZ Quarto reports authoring guide](https://prolfqua.github.io/fgczquartotemplate/fgcz-quarto-reports.html),
+which altdoc publishes directly from the
+[skill source file](https://github.com/prolfqua/fgczquartotemplate/blob/main/skills/fgcz-quarto-reports/SKILL.md).
+It defines the required Overview and Session Info structure, tab-depth rules,
+figure layout, caption guidance, and provenance conventions.
+
 ## Two ways to use it
 
 **Way 1 — Quarto extension** (plain `quarto render`, no R). Once per project:

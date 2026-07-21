@@ -27,6 +27,37 @@ test_that("fgcz_copy_assets accepts a qmd file path", {
   expect_equal(dirname(paths), rep(normalizePath(dir), length(paths)))
 })
 
+test_that("fgcz_use_template copies the report skeleton and visual abstract", {
+  dir <- tempfile()
+
+  qmd <- fgcz_use_template(dir, to = "report.qmd")
+
+  expect_equal(qmd, file.path(dir, "report.qmd"))
+  expect_equal(
+    file.exists(file.path(dir, "fgcz-report-overview.svg")),
+    TRUE
+  )
+})
+
+test_that("the starter follows the required analysis-report layout", {
+  qmd <- trimws(readLines(fgcz_quarto_dir("template.qmd"), warn = FALSE))
+  top_level <- grep("^# ", qmd, value = TRUE)
+  session_info <- match("# Session Info", qmd)
+  session_subtabs <- grep(
+    "^## ",
+    qmd[session_info:length(qmd)],
+    value = TRUE
+  )
+
+  expect_equal(top_level[[1]], "# Overview")
+  expect_equal(tail(top_level, 1), "# Session Info")
+  expect_equal(
+    session_subtabs,
+    c("## Report provenance", "## R session info")
+  )
+  expect_equal(any(grepl("fgcz-report-overview.svg", qmd, fixed = TRUE)), TRUE)
+})
+
 test_that("fgcz_copy_assets rejects non-qmd file paths", {
   dir <- tempfile()
   dir.create(dir)
