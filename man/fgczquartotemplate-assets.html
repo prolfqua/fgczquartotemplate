@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1e273511d09b17b40736144097ac5380.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7db87aff3d14028862e8d47add95a991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -123,6 +123,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fgcz-quarto-reports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Report authoring guide</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -258,7 +264,7 @@ Top-right search + download toolbar. Opt-in: staged next to every report but onl
 <code>template.qmd</code>
 </dt>
 <dd>
-A generic starter report demonstrating the tabset, figure-with-callout, and nesting patterns.
+A generic starter report demonstrating the tabset, figure-with-callout, and nesting patterns. It is copied with <code>fgcz-report-overview.svg</code>, the starter’s visual abstract.
 </dd>
 </dl>
 <p>Because <code style="white-space: pre;">_metadata.yml</code> is applied by directory, a <code>.qmd</code> rendered with a plain <code style="white-space: pre;">quarto render</code> picks up the FGCZ styling with <strong>no package involved and no front-matter reference</strong> – as long as the styling files sit in the same directory. The <code style="white-space: pre;">_metadata.yml</code> references <code>fgcz.scss</code> and <code>fgcz_header_quarto.html</code> by bare filename, which Quarto resolves relative to the input <code>.qmd</code>, so they must travel together; see <code>fgcz_copy_assets()</code> and <code>fgcz_render()</code>. The toolbar (<code>fgcz-plot-finder.html</code>) is staged too but is opt-in – enable it with <code>fgcz_render(buttons = TRUE)</code>.</p>

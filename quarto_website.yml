@@ -20,6 +20,8 @@ website:
     contents:
       - text: Home
         file: index.md
+      - text: Report authoring guide
+        file: fgcz-quarto-reports.qmd
       - section: $ALTDOC_VIGNETTE_BLOCK
       - section: $ALTDOC_MAN_BLOCK
       - text: News
