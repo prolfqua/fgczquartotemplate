@@ -3,6 +3,7 @@ title: "FGCZ tabset layout example"
 format:
   fgczquartotemplate-html:
     include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+fgcz-buttons: [search, download]
 vignette: >
   %\VignetteIndexEntry{Example FGCZ tabset report}
   %\VignetteEngine{quarto::format}

@@ -54,10 +54,12 @@ no `quarto add`. Companion helpers: `fgcz_use_template()` starts a new report
 from the annotated starter, `fgcz_copy_assets()` just stages the files, and
 `fgcz_quarto_dir()` points at the installed assets.
 
-Either way you get the theme and the FGCZ header for free. The right-edge
-**🔍 Find / 📥 Download** toolbar is opt-in — turn it on with
-`fgcz_render(buttons = TRUE)` (or an `include-after-body:` line for the CLI
-routes); see the last section. Start from `inst/quarto/template.qmd` (via
+Either way you get the theme and the FGCZ header for free. The top-right
+**🔍 Find / 📥 Download** toolbar is opt-in — turn on both controls with
+`fgcz_render(buttons = TRUE)`, or select `"search"` and/or `"download"` by
+name. For the CLI route, add an `include-after-body:` line and optionally a
+top-level `fgcz-buttons:` selection; see the last section. Start from
+`inst/quarto/template.qmd` (via
 `fgcz_use_template()`), which demonstrates every layout pattern below in code.
 
 ## Required analysis-report layout
@@ -267,14 +269,22 @@ If a static figure reads fine, keep it static.
 
 ## The Find / Download toolbar: opt-in, and don't hand-build it
 
-The template ships a right-edge toolbar with two tools — **🔍 Find** (a
+The template ships a dynamic top-right toolbar with two tools — **🔍 Find** (a
 searchable graphical table of contents for every figure and table; clicking one
 opens the tab it lives in and scrolls to it) and **📥 Download** (tick-box
-download of the static plots as a single ZIP). It is **off by default**; switch
-it on with `fgcz_render(buttons = TRUE)` (or an `include-after-body:
-…/fgcz-plot-finder.html` line for the extension / plain `quarto render` routes).
-When you want it, use that switch — never hand-add buttons, a table-of-figures,
-or a thumbnail gallery; the template's version is complete and tested.
+download of the static plots as a single ZIP). It is **off by default**. With R,
+use `fgcz_render(buttons = TRUE)` for both, `buttons = "search"` for Find, or
+`buttons = "download"` for Download; `FALSE` remains valid. With the extension,
+add an `include-after-body: …/fgcz-plot-finder.html` line and select controls
+with `fgcz-buttons: search`, `fgcz-buttons: download`, or
+`fgcz-buttons: [search, download]`. Omit the selection to show both. Never
+hand-add buttons, a table-of-figures, or a thumbnail gallery; the template's
+version is complete and tested.
+
+The controls are icon-only at rest to stay compact. Their Find/Download labels
+expand on mouse hover and keyboard focus, and each icon also has an accessible
+tooltip and label. The toolbar follows the bottom of the FGCZ banner while the
+banner is visible, then remains pinned with an equal gap from the top and right.
 
 Every analysis-report vignette records report provenance **once**, in the
 mandatory final **Session Info** tab and its exactly two subtabs:
@@ -322,7 +332,7 @@ tabs meaningful labels.
 - [ ] Figures small and gridded (`layout-ncol`), each with a `fig-cap`
 - [ ] Captions name the metric, axes/encoding, grouping, and key preprocessing
 - [ ] Static figures unless interactivity is truly needed for readability
-- [ ] Toolbar via `buttons = TRUE` (or `include-after-body`) if wanted — never hand-built
+- [ ] Toolbar via `buttons = TRUE`, named buttons, or `include-after-body` if wanted — never hand-built
 - [ ] Last top-level tab/section is Session Info with exactly two subtabs: Report provenance and R session info; add `#fgcz-report-metadata` when the toolbar is enabled
 
 ## Pointers

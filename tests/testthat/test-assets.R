@@ -67,15 +67,141 @@ test_that("fgcz_copy_assets rejects non-qmd file paths", {
   expect_snapshot(error = TRUE, fgcz_copy_assets(txt))
 })
 
-test_that("fgcz_render rejects a non-scalar-logical buttons", {
-  # The buttons check runs before the quarto / file-existence checks, so this
-  # needs neither quarto installed nor a real .qmd.
-  expect_error(fgcz_render("x.qmd", buttons = "yes"), "single TRUE or FALSE")
-  expect_error(
-    fgcz_render("x.qmd", buttons = c(TRUE, FALSE)),
-    "single TRUE or FALSE"
+test_that("toolbar button selections preserve logical compatibility", {
+  validate <- fgczquartotemplate:::.fgcz_validate_buttons
+
+  expect_identical(validate(NULL), character(0))
+  expect_identical(validate(FALSE), character(0))
+  expect_identical(validate(TRUE), c("search", "download"))
+  expect_identical(validate(character(0)), character(0))
+  expect_identical(validate("search"), "search")
+  expect_identical(validate("download"), "download")
+  expect_identical(
+    validate(c("download", "search", "search")),
+    c("search", "download")
   )
-  expect_error(fgcz_render("x.qmd", buttons = NA), "single TRUE or FALSE")
+})
+
+test_that("toolbar button selections reject invalid values", {
+  validate <- fgczquartotemplate:::.fgcz_validate_buttons
+
+  expect_snapshot(error = TRUE, validate(NA))
+  expect_snapshot(error = TRUE, validate(c(TRUE, FALSE)))
+  expect_snapshot(error = TRUE, validate(1L))
+  expect_snapshot(error = TRUE, validate("bogus"))
+  expect_snapshot(error = TRUE, validate(c("search", "bogus")))
+})
+
+test_that("staged toolbar receives the selected button names", {
+  tmp <- tempfile(fileext = ".html")
+  writeLines('var buttons = "__FGCZ_BUTTONS__";', tmp)
+
+  fgczquartotemplate:::.fgcz_set_toolbar_buttons(
+    tmp,
+    c("search", "download")
+  )
+
+  patched <- paste(readLines(tmp, warn = FALSE), collapse = "\n")
+  expect_equal(grepl("__FGCZ_BUTTONS__", patched, fixed = TRUE), FALSE)
+  expect_equal(grepl('"search download"', patched, fixed = TRUE), TRUE)
+})
+
+test_that("fgcz_render supports logical and named toolbar selections", {
+  testthat::skip_if_not(quarto::quarto_available())
+  dir <- tempfile()
+  dir.create(dir)
+  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  qmd <- file.path(dir, "report.qmd")
+  writeLines(c("---", 'title: "Toolbar test"', "---", "", "Body."), qmd)
+  output <- file.path(dir, "report.html")
+
+  fgcz_render(qmd, buttons = FALSE, quiet = TRUE)
+  html <- paste(readLines(output, warn = FALSE), collapse = "\n")
+  expect_equal(grepl("fgcz-pf-toolbar", html, fixed = TRUE), FALSE)
+
+  fgcz_render(qmd, buttons = TRUE, quiet = TRUE)
+  html <- paste(readLines(output, warn = FALSE), collapse = "\n")
+  expect_equal(grepl("fgcz-pf-toolbar", html, fixed = TRUE), TRUE)
+  expect_equal(
+    grepl('FGCZ_BUTTONS = "search download"', html, fixed = TRUE),
+    TRUE
+  )
+
+  fgcz_render(qmd, buttons = "search", quiet = TRUE)
+  html <- paste(readLines(output, warn = FALSE), collapse = "\n")
+  expect_equal(grepl('FGCZ_BUTTONS = "search"', html, fixed = TRUE), TRUE)
+})
+
+test_that("the Quarto filter rejects unknown button names", {
+  testthat::skip_if_not(quarto::quarto_available())
+  dir <- tempfile()
+  dir.create(dir)
+  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  file.copy(fgcz_quarto_dir("fgcz-buttons.lua"), dir)
+  qmd <- file.path(dir, "invalid-buttons.qmd")
+  writeLines(
+    c(
+      "---",
+      'title: "Invalid buttons"',
+      "format: html",
+      "filters: [fgcz-buttons.lua]",
+      "fgcz-buttons: bogus",
+      "---",
+      "",
+      "Report body."
+    ),
+    qmd
+  )
+
+  output <- suppressWarnings(
+    system2(
+      quarto::quarto_path(),
+      c("render", shQuote(qmd)),
+      stdout = TRUE,
+      stderr = TRUE
+    )
+  )
+
+  expect_equal(attr(output, "status"), 1L)
+  expect_match(
+    paste(output, collapse = "\n"),
+    "Unknown fgcz-buttons value(s): bogus. Valid values are: search, download.",
+    fixed = TRUE
+  )
+})
+
+test_that("the Quarto filter injects and normalizes a valid button list", {
+  testthat::skip_if_not(quarto::quarto_available())
+  dir <- tempfile()
+  dir.create(dir)
+  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  file.copy(fgcz_quarto_dir("fgcz-buttons.lua"), dir)
+  qmd <- file.path(dir, "download-button.qmd")
+  writeLines(
+    c(
+      "---",
+      'title: "Download button"',
+      "format: html",
+      "filters: [fgcz-buttons.lua]",
+      "fgcz-buttons: [download, search, search]",
+      "---",
+      "",
+      "Report body."
+    ),
+    qmd
+  )
+
+  quarto::quarto_render(qmd, quiet = TRUE)
+  html <- paste(
+    readLines(file.path(dir, "download-button.html"), warn = FALSE),
+    collapse = "\n"
+  )
+
+  expect_match(
+    html,
+    'window.FGCZ_BUTTONS = ["search","download"]',
+    fixed = TRUE
+  )
 })
 
 test_that("plot finder downloads use report metadata and current timestamps", {
@@ -84,9 +210,13 @@ test_that("plot finder downloads use report metadata and current timestamps", {
     collapse = "\n"
   )
 
-  expect_match(toolbar, "right: 0; top: 25vh", fixed = TRUE)
-  expect_match(toolbar, "flex-direction: column", fixed = TRUE)
+  expect_match(toolbar, "top: 107px; right: .75rem", fixed = TRUE)
+  expect_match(toolbar, "flex-direction: row", fixed = TRUE)
+  expect_match(toolbar, '<span class="lbl">Find</span>', fixed = TRUE)
   expect_match(toolbar, '<span class="lbl">Download</span>', fixed = TRUE)
+  expect_match(toolbar, "button:hover .lbl", fixed = TRUE)
+  expect_match(toolbar, "button:focus-visible .lbl", fixed = TRUE)
+  expect_match(toolbar, "positionToolbar", fixed = TRUE)
   expect_match(toolbar, "fgcz-report-metadata", fixed = TRUE)
   expect_match(toolbar, "'order_' + orderId", fixed = TRUE)
   expect_match(toolbar, "'workunit_' + workunitId", fixed = TRUE)

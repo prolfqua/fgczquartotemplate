@@ -42,12 +42,19 @@ quarto render my_report.qmd
 
 Done. ✅
 
-**Optional — 🔍 Find / 📥 Download toolbar** (off by default). Switch it on per
-report by adding one line to the header:
+**Optional — 🔍 Find / 📥 Download toolbar** (off by default). Switch it on and
+select its buttons in the report header:
 
 ```yaml
-include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+format:
+  fgczquartotemplate-html:
+    include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+fgcz-buttons: [search, download]
 ```
+
+Use `fgcz-buttons: search` or `fgcz-buttons: download` for one button. Omit
+`fgcz-buttons` to show both when the toolbar is included. Unknown names stop the
+render instead of silently hiding controls.
 
 ---
 
@@ -74,12 +81,14 @@ title: "My report"
 ```r
 fgczquartotemplate::fgcz_render("my_report.qmd")                 # no toolbar
 fgczquartotemplate::fgcz_render("my_report.qmd", buttons = TRUE) # 🔍 Find / 📥 Download
+fgczquartotemplate::fgcz_render("my_report.qmd", buttons = "search") # 🔍 Find only
 ```
 
 Done. ✅ (`fgcz_render` copies `_metadata.yml`, `fgcz.scss`,
 `fgcz_header_quarto.html`, and `fgcz-plot-finder.html` next to the `.qmd`, then
 calls `quarto::quarto_render()`. The toolbar is staged either way but only wired
-in when `buttons = TRUE`.)
+in when enabled. `TRUE` and `FALSE` remain supported; button names allow finer
+selection.)
 
 If you want to separate these two steps, copy the assets first and render
 yourself:
@@ -118,6 +127,7 @@ Both produce the **same** report. They can coexist in one repo.
 ```r
 fgcz_render("report.qmd")               # stage assets + render (the usual one)
 fgcz_render("report.qmd", buttons = TRUE) # ...plus the 🔍 Find / 📥 Download toolbar
+fgcz_render("report.qmd", buttons = "download") # ...or just 📥 Download
 fgcz_copy_assets("report.qmd")          # stage assets next to that file
 fgcz_copy_assets("dir")                 # or stage assets into an existing dir
 fgcz_use_template("dir", "report.qmd")  # start a new report from the template
@@ -135,7 +145,8 @@ sit next to the `.qmd` at render time. Two clean ways to get them there:
 
 ## For maintainers
 
-- Edit `fgcz.scss`, `fgcz_header_quarto.html`, and `fgcz-plot-finder.html` in
+- Edit `fgcz.scss`, `fgcz_header_quarto.html`, `fgcz-plot-finder.html`, and
+  `fgcz-buttons.lua` in
   `inst/quarto/`, then run `Rscript data-raw/sync_assets.R` to mirror them into
   `_extensions/` and `vignettes/_extensions/`.
 - Keep `inst/quarto/_metadata.yml` and `_extensions/fgczquartotemplate/_extension.yml`

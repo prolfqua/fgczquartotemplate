@@ -18,7 +18,10 @@ because of its reserved name -- reports need no reference to it.}
 \verb{include-in-header}.}
 \item{\code{fgcz-plot-finder.html}}{Top-right search + download toolbar.
 Opt-in: staged next to every report but only injected (via
-\code{include-after-body}) when asked for, e.g. \code{fgcz_render(buttons = TRUE)}.}
+\code{include-after-body}) when asked for, e.g.
+\code{fgcz_render(buttons = "search")}.}
+\item{\code{fgcz-buttons.lua}}{Quarto extension filter that validates and
+applies a report's optional \verb{fgcz-buttons:} YAML selection.}
 \item{\code{template.qmd}}{A generic starter report demonstrating the tabset,
 figure-with-callout, and nesting patterns. It is copied with
 \code{fgcz-report-overview.svg}, the starter's visual abstract.}
@@ -31,5 +34,6 @@ same directory. The \verb{_metadata.yml} references \code{fgcz.scss} and
 \code{fgcz_header_quarto.html} by bare filename, which Quarto resolves relative to
 the input \code{.qmd}, so they must travel together; see \code{\link[=fgcz_copy_assets]{fgcz_copy_assets()}} and
 \code{\link[=fgcz_render]{fgcz_render()}}. The toolbar (\code{fgcz-plot-finder.html}) is staged too but is
-opt-in -- enable it with \code{fgcz_render(buttons = TRUE)}.
+opt-in -- enable both buttons with \code{fgcz_render(buttons = TRUE)}, or select
+buttons by name.
 }

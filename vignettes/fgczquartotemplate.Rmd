@@ -70,6 +70,9 @@ list.files(fgcz_quarto_dir())
 | `_metadata.yml` | Shared format defaults, applied automatically to every `.qmd` in the directory. |
 | `fgcz.scss` | Theme overrides — tabset/card styling, figure rows. |
 | `fgcz_header_quarto.html` | FGCZ header, injected via `include-in-header`. |
+| `fgcz-plot-finder.html` | Opt-in Find and Download toolbar. |
+| `fgcz-buttons.lua` | Validates and applies toolbar selections for the Quarto extension. |
+| `fgcz-report-overview.svg` | Visual abstract copied with the starter report. |
 | `template.qmd` | Generic starter report demonstrating the layout patterns. |
 
 ## Why the assets must sit next to the report
@@ -139,10 +142,25 @@ needs the Quarto CLI, so the call below is shown but not run in this vignette:
 
 ```{r render, eval = FALSE}
 fgcz_render(qmd, execute_params = list(reportTitle = "My analysis"))
+fgcz_render(qmd, buttons = TRUE) # both toolbar buttons; FALSE remains the default
+fgcz_render(qmd, buttons = "search") # Find only; "download" selects Download
 ```
 
 That is the single call downstream packages use in place of a bare
 `quarto::quarto_render()`.
+
+With the Quarto extension route, opt into the toolbar with
+`include-after-body` and select controls using a top-level `fgcz-buttons:` key:
+
+````yaml
+format:
+  fgczquartotemplate-html:
+    include-after-body: _extensions/fgczquartotemplate/fgcz-plot-finder.html
+fgcz-buttons: [search, download]
+````
+
+Use a single name for one button. Omitting `fgcz-buttons` shows both controls;
+an unknown name stops the render with a validation error.
 
 ## Using it from a downstream package
 
@@ -153,5 +171,5 @@ That is the single call downstream packages use in place of a bare
 3. Leave report front matter free of any styling reference — the staged
    `_metadata.yml` attaches automatically.
 4. Git-ignore the staged copies (`_metadata.yml`, `fgcz.scss`,
-   `fgcz_header_quarto.html`) in the render directory so the packaged assets
-   remain the single source of truth.
+   `fgcz_header_quarto.html`, and `fgcz-plot-finder.html`) in the render
+   directory so the packaged assets remain the single source of truth.

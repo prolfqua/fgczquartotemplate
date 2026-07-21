@@ -22,8 +22,8 @@ Copies the shared styling files (\verb{_metadata.yml}, \code{fgcz.scss},
 package next to a report. \code{path} may be either an existing directory, or an
 existing \code{.qmd} file whose containing directory should receive the assets.
 Because \verb{_metadata.yml} is directory metadata, any \code{.qmd} in the target
-directory then renders with the FGCZ styling (and the search + download
-toolbar) automatically. Call this before rendering, or use \code{\link[=fgcz_render]{fgcz_render()}},
+directory then renders with the FGCZ styling automatically. The toolbar is
+staged but remains opt-in. Call this before rendering, or use \code{\link[=fgcz_render]{fgcz_render()}},
 which calls it for you.
 }
 \examples{

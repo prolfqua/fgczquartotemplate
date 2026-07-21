@@ -9,15 +9,15 @@ fgcz_render(input, buttons = FALSE, ...)
 \arguments{
 \item{input}{Path to the \code{.qmd} to render.}
 
-\item{buttons}{Add the top-right search + download toolbar
-(\code{fgcz-plot-finder.html}) to the report. Defaults to \code{FALSE}; pass \code{TRUE}
-to opt in. The toolbar ships with the package and is always staged next to
-\code{input}, but is only wired in (via \code{include-after-body}) when you ask for
-it here.}
+\item{buttons}{Which top-right toolbar buttons (\code{fgcz-plot-finder.html}) to
+add. Defaults to \code{FALSE}; \code{TRUE} enables both buttons for backward
+compatibility. Alternatively, pass \code{"search"} for Find, \code{"download"} for
+Download, or \code{c("search", "download")} for both. \code{FALSE}, \code{NULL}, and
+\code{character(0)} disable the toolbar.}
 
 \item{...}{Passed on to \code{\link[quarto:quarto_render]{quarto::quarto_render()}} (e.g. \code{execute_params},
 \code{output_file}, \code{quarto_args}). A \code{metadata} list passed here is honored;
-\code{buttons = TRUE} merges \code{include-after-body} into it.}
+enabling buttons merges \code{include-after-body} into it.}
 }
 \value{
 The value of \code{\link[quarto:quarto_render]{quarto::quarto_render()}}, invisibly.
@@ -32,5 +32,6 @@ Quarto automatically, so the report stays fully portable.
 \dontrun{
 fgcz_render("CountQC.qmd", execute_params = list(reportTitle = "CountQC"))
 fgcz_render("CountQC.qmd", buttons = TRUE) # with the Find/Download toolbar
+fgcz_render("CountQC.qmd", buttons = "search") # Find only
 }
 }

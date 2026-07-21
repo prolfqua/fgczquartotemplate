@@ -17,7 +17,12 @@ dest_dir <- file.path("_extensions", "fgczquartotemplate")
 stopifnot(dir.exists(dest_dir), dir.exists(file.path("inst", "quarto")))
 
 ## (1) Sync the byte-identical shared files ----------------------------------
-shared <- c("fgcz.scss", "fgcz_header_quarto.html", "fgcz-plot-finder.html")
+shared <- c(
+  "fgcz.scss",
+  "fgcz_header_quarto.html",
+  "fgcz-plot-finder.html",
+  "fgcz-buttons.lua"
+)
 src <- file.path("inst", "quarto", shared)
 stopifnot(all(file.exists(src)))
 ok <- file.copy(src, dest_dir, overwrite = TRUE)
@@ -44,6 +49,10 @@ for (k in c("execute", "knitr", "crossref", "lightbox")) {
   meta_html[[k]] <- meta[[k]]
 }
 ext_html <- ext$contributes$formats$html
+
+# `filters` is extension-only: the R helper configures the staged toolbar
+# directly, while the Quarto extension reads `fgcz-buttons:` from report YAML.
+ext_html[["filters"]] <- NULL
 
 # Order-independent deep comparison of the two option trees.
 norm <- function(x) {
