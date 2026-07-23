@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using the FGCZ Quarto report templates – fgczquartotemplate</title>
+<title>Using the FGCZ Quarto report templates – fgczQuartoTemplate</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">fgczquartotemplate</span>
+    <span class="navbar-title">fgczQuartoTemplate</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -127,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/prolfqua/fgczquartotemplate"> <i class="bi bi-github" role="img" aria-label="fgczquartotemplate GitHub">
+    <a class="nav-link" href="https://github.com/fgcz/fgczQuartoTemplate"> <i class="bi bi-github" role="img" aria-label="fgczQuartoTemplate GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -142,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../vignettes/example-report.html">Articles</a></li><li class="breadcrumb-item"><a href="../vignettes/fgczquartotemplate.html">Using the FGCZ Quarto report templates</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../vignettes/example-report.html">Articles</a></li><li class="breadcrumb-item"><a href="../vignettes/fgczQuartoTemplate.html">Using the FGCZ Quarto report templates</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -183,7 +183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../vignettes/fgczquartotemplate.html" class="sidebar-item-text sidebar-link active">
+  <a href="../vignettes/fgczQuartoTemplate.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Using the FGCZ Quarto report templates</span></a>
   </div>
 </li>
@@ -224,8 +224,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../man/fgczquartotemplate-assets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">fgczquartotemplate-assets</span></a>
+  <a href="../man/fgczQuartoTemplate-assets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fgczQuartoTemplate-assets</span></a>
   </div>
 </li>
       </ul>
@@ -259,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../vignettes/example-report.html">Articles</a></li><li class="breadcrumb-item"><a href="../vignettes/fgczquartotemplate.html">Using the FGCZ Quarto report templates</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../vignettes/example-report.html">Articles</a></li><li class="breadcrumb-item"><a href="../vignettes/fgczQuartoTemplate.html">Using the FGCZ Quarto report templates</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Using the FGCZ Quarto report templates</h1>
 </div>
@@ -280,18 +280,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="what-this-package-provides" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-package-provides">What this package provides</h2>
-<p><code>fgczquartotemplate</code> ships one shared set of Quarto report assets so that FGCZ analysis packages (<code>ezRun</code>, <code>prolfqua</code>, …) all produce reports with the same look and feel. A theme change becomes a single package bump instead of an edit in every downstream package.</p>
-<p><strong>See the layout live:</strong> <a href="https://prolfqua.github.io/fgczquartotemplate/vignettes/example-report.html" class="uri">https://prolfqua.github.io/fgczquartotemplate/vignettes/example-report.html</a> — a full report rendered with the extension (tabsets, figure + callout rows, nesting, lightbox). The documentation site is built with <a href="https://altdoc.etiennebacher.com/">altdoc</a>, which renders that report through Quarto, so the FGCZ layout and its panel-tabsets appear exactly as they do locally (pkgdown, by contrast, mangles Quarto tabsets). This article explains how to <em>use</em> the templates.</p>
-<p><strong>Author reports consistently:</strong> read the <a href="https://prolfqua.github.io/fgczquartotemplate/fgcz-quarto-reports.html">FGCZ Quarto reports authoring guide</a>, which altdoc publishes directly from the <a href="https://github.com/prolfqua/fgczquartotemplate/blob/main/skills/fgcz-quarto-reports/SKILL.md">skill source file</a>. It defines the required Overview and Session Info structure, tab-depth rules, figure layout, caption guidance, and provenance conventions.</p>
+<p><code>fgczQuartoTemplate</code> ships one shared set of Quarto report assets so that FGCZ analysis packages (<code>ezRun</code>, <code>prolfqua</code>, …) all produce reports with the same look and feel. A theme change becomes a single package bump instead of an edit in every downstream package.</p>
+<p><strong>See the layout live:</strong> <a href="https://fgcz.github.io/fgczQuartoTemplate/vignettes/example-report.html" class="uri">https://fgcz.github.io/fgczQuartoTemplate/vignettes/example-report.html</a> — a full report rendered with the extension (tabsets, figure + callout rows, nesting, lightbox). The documentation site is built with <a href="https://altdoc.etiennebacher.com/">altdoc</a>, which renders that report through Quarto, so the FGCZ layout and its panel-tabsets appear exactly as they do locally (pkgdown, by contrast, mangles Quarto tabsets). This article explains how to <em>use</em> the templates.</p>
+<p><strong>Author reports consistently:</strong> read the <a href="https://fgcz.github.io/fgczQuartoTemplate/fgcz-quarto-reports.html">FGCZ Quarto reports authoring guide</a>, which altdoc publishes directly from the <a href="https://github.com/fgcz/fgczQuartoTemplate/blob/main/skills/fgcz-quarto-reports/SKILL.md">skill source file</a>. It defines the required Overview and Session Info structure, tab-depth rules, figure layout, caption guidance, and provenance conventions.</p>
 </section>
 <section id="two-ways-to-use-it" class="level2">
 <h2 class="anchored" data-anchor-id="two-ways-to-use-it">Two ways to use it</h2>
 <p><strong>Way 1 — Quarto extension</strong> (plain <code>quarto render</code>, no R). Once per project:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> add prolfqua/fgczquartotemplate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> add fgcz/fgczQuartoTemplate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>then in the report header:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My report"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> fgczquartotemplate-html</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> fgczQuartoTemplate-html</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Way 2 — R helper</strong> (stage the files from R, no <code>format:</code> line needed) — the subject of the rest of this article. Both routes produce the same report and can coexist in one repo.</p>
 <p>The assets live under <code>inst/quarto/</code>:</p>
@@ -427,21 +427,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(qmd, <span class="at">execute_params =</span> <span class="fu">list</span>(<span class="at">reportTitle =</span> <span class="st">"My analysis"</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(qmd, <span class="at">buttons =</span> <span class="cn">TRUE</span>) <span class="co"># both toolbar buttons; FALSE remains the default</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(qmd, <span class="at">buttons =</span> <span class="st">"search"</span>) <span class="co"># Find only; "download" selects Download</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(qmd, <span class="at">buttons =</span> <span class="st">"search"</span>) <span class="co"># Find only; "download" selects Download</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz_render</span>(qmd, <span class="at">colour =</span> <span class="cn">TRUE</span>, <span class="at">number =</span> <span class="cn">TRUE</span>) <span class="co"># per-level tab colours + numbers</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>That is the single call downstream packages use in place of a bare <code>quarto::quarto_render()</code>.</p>
 <p>With the Quarto extension route, opt into the toolbar with <code>include-after-body</code> and select controls using a top-level <code>fgcz-buttons:</code> key:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">fgczquartotemplate-html</span><span class="kw">:</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">include-after-body</span><span class="kw">:</span><span class="at"> _extensions/fgczquartotemplate/fgcz-plot-finder.html</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">fgczQuartoTemplate-html</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">include-after-body</span><span class="kw">:</span><span class="at"> _extensions/fgczQuartoTemplate/fgcz-plot-finder.html</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz-buttons</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">search</span><span class="kw">,</span><span class="at"> download</span><span class="kw">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Use a single name for one button. Omitting <code>fgcz-buttons</code> shows both controls; an unknown name stops the render with a validation error.</p>
+<p>Two further opt-in tab features, both off by default and independent of each other, are set as top-level YAML keys (or via <code>fgcz_render(colour =, number =)</code> from R):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz-colour</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">   # per-nesting-level tab palette (deep blue → indigo)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fgcz-number</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">   # hierarchical tab numbers: 1, 1.1, 1.1.1 …</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>fgcz-colour</code> replaces the uniform grey folder tabs with one hue per nesting level, so depth reads as colour; <code>fgcz-number</code> prefixes every tab label with its hierarchical position, counting across sibling tabsets at the same depth.</p>
 </section>
 <section id="using-it-from-a-downstream-package" class="level2">
 <h2 class="anchored" data-anchor-id="using-it-from-a-downstream-package">Using it from a downstream package</h2>
 <ol type="1">
-<li>Add <code>fgczquartotemplate</code> to <code>Imports</code> (and, since it is distributed on GitHub, <code>Remotes: prolfqua/fgczquartotemplate</code>).</li>
-<li>Replace <code>quarto::quarto_render()</code> calls with <code>fgczquartotemplate::fgcz_render()</code>.</li>
+<li>Add <code>fgczQuartoTemplate</code> to <code>Imports</code> (and, since it is distributed on GitHub, <code>Remotes: fgcz/fgczQuartoTemplate</code>).</li>
+<li>Replace <code>quarto::quarto_render()</code> calls with <code>fgczQuartoTemplate::fgcz_render()</code>.</li>
 <li>Leave report front matter free of any styling reference — the staged <code>_metadata.yml</code> attaches automatically.</li>
 <li>Git-ignore the staged copies (<code>_metadata.yml</code>, <code>fgcz.scss</code>, <code>fgcz_header_quarto.html</code>, and <code>fgcz-plot-finder.html</code>) in the render directory so the packaged assets remain the single source of truth.</li>
 </ol>
