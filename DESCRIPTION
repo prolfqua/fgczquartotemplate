@@ -6,10 +6,11 @@ Authors@R: c(
     person("Jonas", "Grossmann", role = "aut"),
     person("Falko", "Noé", role = "aut"),
     person("Witold", "Wolski", , "witold@ethz.ch", role = c("aut", "cre")))
-Description: Shared Quarto report assets for FGCZ analysis packages
-    (ezRun, prolfqua): a common format YAML, SCSS theme, HTML header, and
-    starter report templates, plus helpers to stage them next to a .qmd
-    and render.
+Description: Shared FGCZ Quarto styling and report templates with
+    configurable tab colours and numbering, searchable figures and tables,
+    and downloadable plots, source files, and standalone HTML reports.
+    Includes helpers to stage the shared assets beside a .qmd file and render
+    it.
 License: GPL (>= 3)
 URL: https://github.com/fgcz/fgczQuartoTemplate,
     https://fgcz.github.io/fgczQuartoTemplate/

@@ -1,5 +1,7 @@
 # fgczQuartoTemplate (development version)
 
+* Package metadata now describes the configurable tabs, searchable report
+  content, and downloadable report bundle.
 * Two optional tab features, both off by default and independent of each other:
   `fgcz-colour: true` applies a per-nesting-level palette (deep blue → indigo)
   instead of the uniform folder tabs, and `fgcz-number: true` prefixes every tab
