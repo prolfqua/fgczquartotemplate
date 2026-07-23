@@ -68,7 +68,7 @@ test_that("fgcz_copy_assets rejects non-qmd file paths", {
 })
 
 test_that("toolbar button selections preserve logical compatibility", {
-  validate <- fgczquartotemplate:::.fgcz_validate_buttons
+  validate <- fgczQuartoTemplate:::.fgcz_validate_buttons
 
   expect_identical(validate(NULL), character(0))
   expect_identical(validate(FALSE), character(0))
@@ -83,7 +83,7 @@ test_that("toolbar button selections preserve logical compatibility", {
 })
 
 test_that("toolbar button selections reject invalid values", {
-  validate <- fgczquartotemplate:::.fgcz_validate_buttons
+  validate <- fgczQuartoTemplate:::.fgcz_validate_buttons
 
   expect_snapshot(error = TRUE, validate(NA))
   expect_snapshot(error = TRUE, validate(c(TRUE, FALSE)))
@@ -96,7 +96,7 @@ test_that("staged toolbar receives the selected button names", {
   tmp <- tempfile(fileext = ".html")
   writeLines('var buttons = "__FGCZ_BUTTONS__";', tmp)
 
-  fgczquartotemplate:::.fgcz_set_toolbar_buttons(
+  fgczQuartoTemplate:::.fgcz_set_toolbar_buttons(
     tmp,
     c("search", "download")
   )
@@ -107,7 +107,7 @@ test_that("staged toolbar receives the selected button names", {
 })
 
 test_that("feature flags map to the classes they add, in canonical order", {
-  validate <- fgczquartotemplate:::.fgcz_validate_flags
+  validate <- fgczQuartoTemplate:::.fgcz_validate_flags
 
   expect_identical(validate(colour = FALSE, number = FALSE), character(0))
   expect_identical(validate(colour = TRUE, number = FALSE), "fgcz-colour")
@@ -120,7 +120,7 @@ test_that("feature flags map to the classes they add, in canonical order", {
 })
 
 test_that("feature flags reject non-logical values", {
-  validate <- fgczquartotemplate:::.fgcz_validate_flags
+  validate <- fgczQuartoTemplate:::.fgcz_validate_flags
 
   expect_error(validate(colour = NA), "`colour` must be a single TRUE or FALSE")
   expect_error(validate(number = "yes"), "`number` must be a single TRUE or FALSE")
@@ -134,7 +134,7 @@ test_that("staged header receives the enabled feature classes", {
   tmp <- tempfile(fileext = ".html")
   writeLines('var flags = "__FGCZ_FLAGS__";', tmp)
 
-  fgczquartotemplate:::.fgcz_set_header_flags(
+  fgczQuartoTemplate:::.fgcz_set_header_flags(
     tmp,
     c("fgcz-colour", "fgcz-number")
   )
